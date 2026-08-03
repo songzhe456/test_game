@@ -1,6 +1,7 @@
 package com.test;
 
 import com.test.client.Client;
+import com.test.client.display.Window;
 import com.test.user.User;
 import com.test.util.RandomUtil;
 import com.test.server.Server;
@@ -16,7 +17,6 @@ public class Main {
             User user = new User();
             user.scanMessage();
             Runnable serverRunnable = () -> {
-
                 new Server().run();
             };
             Thread serverThread = new Thread(serverRunnable);

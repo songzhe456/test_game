@@ -1,6 +1,8 @@
 package com.test.client;
 
+import com.test.client.display.Window;
 import com.test.server.Server;
+import javafx.application.Application;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +28,12 @@ public class Client {
                         client.connect(new InetSocketAddress("127.0.0.1", PORT), 5000);
                         if (client.isConnected()) {
                             logger.info("客户端已连接");
+                            Runnable showWindowRunnable = () -> {
+                                Window.main((null));
+                            };
+                            Thread showWindowThread = new Thread(showWindowRunnable);
+                            showWindowThread.setName("Show Window Thread");
+                            //showWindowThread.start();
                             logger.info("即将发送消息");
                             Runnable postRunnable = () -> {
                                 postMessage(Config.FIGHT_WORD);

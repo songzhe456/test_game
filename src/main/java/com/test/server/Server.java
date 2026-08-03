@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.ArrayList;
 
 public class Server {
     private static final int PORT = 8888;
@@ -47,6 +48,11 @@ public class Server {
         private static int ROLL_COUNT = 1;
         private static int reTries = 0;
         private static boolean canNext;
+        private static ArrayList<Entity> entities = new ArrayList<>();
+
+        public static void addEntity(Entity entity) {
+            entities.add(entity);
+        }
 
         public static void setCanNext(boolean canNext) {
             ClientHandler.canNext = canNext;
@@ -54,6 +60,7 @@ public class Server {
 
         @Override
         public void run() {
+
             try {
                 try {
                     Thread.sleep(1);
@@ -72,18 +79,13 @@ public class Server {
         }
 
         public void fight() {
+
             Runnable createEntityRunnable = () -> {
-                var entities = new Object() {
-                    Entity cow = null;
-                    Entity man = null;
-                    Entity nullEntity = null;
-                    Entity kfcEntity = null;
-                };
                 try {
-                    entities.cow = Entity.summon("cow", 150, "cow");
-                    entities.man = Entity.summon("man", 150, "man");
-                    entities.nullEntity = Entity.summon("null", 150, "bruce");
-                    entities.kfcEntity = Entity.summon("kfc entity",200,"kfc entity");
+                    addEntity(Entity.summon("cow", 150, "cow"));
+                    addEntity(Entity.summon("man", 150, "man"));
+                    addEntity(Entity.summon("null", 150, "bruce"));
+                    addEntity(Entity.summon("kfc entity",200,"kfc entity"));
                 } catch (Exception e) {
                     logger.error("生成实体时出现异常", e);
                 }
@@ -98,6 +100,12 @@ public class Server {
                 createRandomEntityThread.setName("Random Entity Summon Thread");
                 createRandomEntityThread.start();
                 try {
+                    var entities = new Object() {
+                    Entity cow = getEntities().get(0);
+                    Entity man = getEntities().get(1);
+                    Entity nullEntity = getEntities().get(2);
+                    Entity kfcEntity = getEntities().get(3);
+                };
                     Runnable rollRunnable = () -> {
                         while (true) {
                             try {
@@ -133,6 +141,8 @@ public class Server {
                                 }
                                 entities.kfcEntity.attack(entities.nullEntity, entities.nullEntity.getHealth());
                                 logger.info("{}造成了暴击{}", entities.kfcEntity.getId(), entities.kfcEntity.getCritValue());
+
+                                logger.debug("目前实体列表为{}",Server.ClientHandler.getEntities());
 
                                 if (ROLL_COUNT >= 999) {
                                     try {
@@ -170,6 +180,7 @@ public class Server {
             if (msg != null && (msg.contains("战斗") && (msg.contains("强") || msg.contains("good") || msg.contains("好") || msg.contains("爽")))) {
                 LOGGER.info("成功接收到客户端传入的“{}”战前祝词，即将开始战斗", msg);
                 fight();
+
             } else if (msg == null && reTries < 3) {
                 LOGGER.info("消息获取失败，即将重试");
                 reTries += 1;
@@ -182,6 +193,11 @@ public class Server {
                 LOGGER.info("程序未触发分支");
             }
         }
+
+        public static ArrayList<Entity> getEntities() {
+            return entities;
+        }
+
     }
 
     public static ServerSocket getServer() {

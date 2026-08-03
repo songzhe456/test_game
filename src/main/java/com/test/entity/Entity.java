@@ -2,6 +2,7 @@ package com.test.entity;
 
 import com.test.func.Attack;
 import com.test.func.Crit;
+import com.test.server.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,11 +15,13 @@ public abstract class Entity implements Attack {
     private double damage;
     private EntityType type;
     private boolean isDead;
-    private ArrayList<Entity> entities = new ArrayList<>();
+
     private Crit crit = new Crit();
     private double critValue;
     private static final Logger logger = LoggerFactory.getLogger(Entity.class);
     private static String ownerId;
+    private static boolean isFirstSummon;
+    private static Entity lootInLoot;
     public Entity(EntityType type,double health,String id){
         this.type = type;
         setId(id);
@@ -26,8 +29,9 @@ public abstract class Entity implements Attack {
         if(type != EntityType.LOOT) {
             entitySummoned(health, id);
         } else if (type == EntityType.LOOT) {
-            entities.add(new Cow(20,ownerId + " of loot"));
-            lootEntitySummoned(health,id,entities);
+            lootInLoot = new Cow(20,ownerId + " of loot");
+            Server.ClientHandler.getEntities().add(lootInLoot);
+            lootEntitySummoned(health,id,lootInLoot);
         }
         if (type.equals(EntityType.NULL)){
             try {
@@ -59,6 +63,14 @@ public abstract class Entity implements Attack {
         this.critValue = critValue;
     }
 
+    public static boolean isFirstSummon() {
+        return isFirstSummon;
+    }
+
+    public static void setFirstSummon(boolean firstSummon) {
+        isFirstSummon = firstSummon;
+    }
+
     public enum EntityType{
         NULL,
         DEFAULT,
@@ -79,11 +91,12 @@ public abstract class Entity implements Attack {
     public void setHealth(double health) {
         double originHealth = this.health;
         this.health = Math.max(0,health);
-        if (originHealth != 0) {
+        if (!isFirstSummon()) {
             logger.info("{}的血量由{}变为{}", id, originHealth, Math.round(health - (Math.round((critValue) * 10 / 10.0))));
         }
-        else if(originHealth == 0){
+        else if(originHealth == 0 && isFirstSummon){
             logger.info("{}刚被生成，血量已由{}变为{}", id, originHealth, Math.round(health * 10) / 10.0);
+            setFirstSummon(false);
         }
     }
 
@@ -95,8 +108,8 @@ public abstract class Entity implements Attack {
         logger.info("生成了{}:[\n    hp:{}\n]", id, health);
     }
 
-    public static void lootEntitySummoned(double health, String id, ArrayList entities){
-        logger.info("生成了{}:[\n    hp:{}\n    loots:{}\n]", id, health, entities);
+    public void lootEntitySummoned(double health, String id, Entity entity){
+        logger.info("生成了{}:[\n    hp:{}\n    loots:{}\n]", id, health, Server.ClientHandler.getEntities().get(getEntityIndex(entity)));
     }
 
     public void damage(double health){
@@ -110,7 +123,10 @@ public abstract class Entity implements Attack {
             isDead = true;
             ownerId = id;
             Runnable lootSpawnRunnable = () -> {
+                Server.ClientHandler.getEntities().remove(this);
                 LootEntity entityLoot = new LootEntity(EntityType.LOOT, 5.0, id + "'s loot");
+                logger.debug("有实体死亡，当前实体列表为{}",Server.ClientHandler.getEntities());
+
             };
             Thread lootSpawnThread = new Thread(lootSpawnRunnable);
             lootSpawnThread.setName("Loot Spawn Thread");
@@ -128,13 +144,17 @@ public abstract class Entity implements Attack {
 
     public static Entity summon(String type,double health,String id){
         if(Objects.equals(type, "cow")){
+            setFirstSummon(true);
             return new Cow(health, id);
         }
         else if (Objects.equals(type, "man")){
+            setFirstSummon(true);
             return new Man(health, id);
         } else if (Objects.equals(type, "kfc entity")) {
+            setFirstSummon(true);
             return new KFCEntity(health,id);
         } else {
+            setFirstSummon(true);
             return new NullEntity(health, id);
         }
     }
@@ -142,5 +162,13 @@ public abstract class Entity implements Attack {
     @Override
     public String toString() {
         return id;
+    }
+
+    public static Integer getEntityIndex(Entity entity){
+        if(Server.ClientHandler.getEntities().indexOf(entity) < 0) {
+            logger.warn("由于战利品在实体索引中为-1，所以已将其处理为最大索引");
+            return Server.ClientHandler.getEntities().size() - 1;
+        }
+        return Server.ClientHandler.getEntities().indexOf(lootInLoot);
     }
 }
