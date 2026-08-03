@@ -77,7 +77,8 @@ public abstract class Entity implements Attack {
         COW,
         MAN,
         LOOT,
-        KFC
+        KFC,
+        MOUSE
     }
 
     public double getHealth() {
@@ -153,6 +154,9 @@ public abstract class Entity implements Attack {
         } else if (Objects.equals(type, "kfc entity")) {
             setFirstSummon(true);
             return new KFCEntity(health,id);
+        } else if (Objects.equals(type,"mouse")) {
+            setFirstSummon(true);
+            return new Mouse(health, id);
         } else {
             setFirstSummon(true);
             return new NullEntity(health, id);
@@ -170,5 +174,10 @@ public abstract class Entity implements Attack {
             return Server.ClientHandler.getEntities().size() - 1;
         }
         return Server.ClientHandler.getEntities().indexOf(lootInLoot);
+    }
+    public void checkEntityHealth(){
+        if (health <= 0){
+            die();
+        }
     }
 }
