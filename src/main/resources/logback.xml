@@ -19,8 +19,4 @@
         <appender-ref ref="ROLL_FILE"/>
         <appender-ref ref="CONSOLE"/>
     </root>
-    <root level="debug">
-        <appender-ref ref="ROLL_FILE"/>
-        <appender-ref ref="CONSOLE"/>
-    </root>
 </configuration>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.example</groupId>
+  <groupId>com.game</groupId>
   <artifactId>test_game</artifactId>
   <version>1.0-SNAPSHOT</version>
   <build>
@@ -13,7 +13,7 @@
           <archive>
             <manifest>
               <addClasspath>true</addClasspath>
-              <mainClass>com.test.Main</mainClass>
+              <mainClass>com.game.Main</mainClass>
             </manifest>
           </archive>
         </configuration>
@@ -32,9 +32,18 @@
               <goal>shade</goal>
             </goals>
             <configuration>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                  </excludes>
+                </filter>
+              </filters>
               <transformers>
                 <transformer>
-                  <mainClass>com.test.Main</mainClass>
+                  <mainClass>com.game.Main</mainClass>
                 </transformer>
               </transformers>
             </configuration>

@@ -1,0 +1,34 @@
+package com.game.item;
+
+import com.game.entity.Entity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Objects;
+
+public class Foods extends Item{
+    Logger logger = LoggerFactory.getLogger(Foods.class);
+    private static double healthResume;
+    public Foods(FoodType type,String name,double healthResume) {
+        this.healthResume = healthResume;
+        super(ItemType.FOODS, name);
+    }
+    public void eat(Entity entity){
+        entity.setHealth(entity.getHealth() + healthResume);
+        logger.info("{}吃了{}回了{}血量",entity.getId(),this.name,healthResume);
+    }
+
+    public enum FoodType{
+        APPLE,
+        COKE
+    }
+
+    public static Foods create(String type, String name) {
+        if(Objects.equals(type,"apple")){
+            return new Apple(name);
+        }
+        else {
+            return null;
+        }
+    }
+}
