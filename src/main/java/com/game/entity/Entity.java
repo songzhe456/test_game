@@ -89,7 +89,7 @@ public abstract class Entity implements Attack {
             logger.info("{}的血量由{}变为{}，位置是{}", id, originHealth, Math.round(health - (Math.round((critValue) * 10 / 10.0))),this.move);
         }
         else if(originHealth == 0 && isFirstSummon){
-            logger.info("{}刚被生成，血量已由{}变为{}，位置是{}", id, originHealth, Math.round(health * 10) / 10.0,this.move);
+            logger.info("{}刚被生成，血量已由{}变为{}", id, originHealth, Math.round(health * 10) / 10.0);
             setFirstSummon(false);
         }
     }

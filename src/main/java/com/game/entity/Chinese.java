@@ -1,5 +1,6 @@
 package com.game.entity;
 
+import com.game.entity.func.BodyPart;
 import com.game.entity.func.Direction;
 import com.game.server.GameRoll;
 import org.slf4j.Logger;
@@ -14,7 +15,7 @@ public class Chinese extends Eater{
     @Override
     public void attack(Entity target, double critValue) {
         super.attack(target,critValue);
-        GameRoll.entityMove(this, Direction.Directions.UP,this.getId());
+        GameRoll.entityMove(this, Direction.Directions.UP,this.getId(), BodyPart.HEAD);
         logger.info("{}能飞",getId());
     }
 }
