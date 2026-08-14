@@ -3,6 +3,7 @@ package com.game.server;
 import com.game.client.Config;
 import com.game.entity.Entities;
 import com.game.entity.Entity;
+import com.game.entity.func.BodyPart;
 import com.game.entity.func.Direction;
 import com.game.func.Command;
 import com.game.func.Fight;
@@ -258,8 +259,8 @@ public class GameRoll implements Runnable {
         return itemList;
     }
 
-    public static void entityMove(Entity entity, Direction.Directions directions, String id) {
+    public static void entityMove(Entity entity, Direction.Directions directions, String id, BodyPart part) {
         entity.move(directions, id);
-        logger.info("{}往{}移动了", id, directions);
+        logger.info("{}的{}往{}移动了", id, part,directions);
     }
 }
