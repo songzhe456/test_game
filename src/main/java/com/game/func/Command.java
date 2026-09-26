@@ -1,13 +1,11 @@
 package com.game.func;
 
 import com.game.entity.Entity;
-import com.game.entity.func.BodyPart;
 import com.game.entity.func.Direction;
 import com.game.server.GameRoll;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Objects;
 import java.util.Scanner;
 
 import static com.game.entity.func.BodyPart.FOOT;
@@ -53,9 +51,9 @@ public class Command {
         String entity = chooser.nextLine();
         Entity chosen = null;
         try {
-            for (int i = 0; i < GameRoll.getEntities().size(); i++) {
-                if (entity.equals(GameRoll.getEntities().get(i).getId())) {
-                    chosen = GameRoll.getEntities().get(i);
+            for (Entity e:GameRoll.getEntities()) {
+                if (entity.equals(e.getId())) {
+                    chosen = e;
                 }
             }
         } catch (Exception e) {
