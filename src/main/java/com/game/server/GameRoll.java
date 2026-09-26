@@ -101,7 +101,7 @@ public class GameRoll implements Runnable {
                                     randomEntity.die();
                                     randomEntity = null;
                                 } else {
-                                    logger.warn("实体已死亡或不存在");
+                                    logger.warn("所有实体都已在场");
                                 }
                                 System.out.println("请选择要移动的实体");
                                 try {

@@ -17,13 +17,12 @@ public class Cow extends Eater{
     @Override
     public void attack(Entity target, double attackCrit) {
         if(target.getHealth() > 0) {
-            logger.info("{}攻击了{}造成了{}点血量", getId(), target.getId(), Math.round(attackCrit * 10) / 10.0);
-            target.setHealth(target.getHealth() - attackCrit);
+            super.attack(target, attackCrit);
             eat(new Apple("apple"),this);
         }
         else {
+            target.die();
             logger.warn("目标{}已死亡",target);
-            target.setHealth(target.getHealth());
         }
     }
 

@@ -6,7 +6,7 @@ import com.game.server.GameRoll;
 import com.game.server.Server;
 
 public class Flaw extends Main {
-    public void flaw() throws Exception {
+    public void flaw() throws Throwable {
         while (true){
             GameRoll.addEntity(-1,new NullEntity(20,null));
         }
