@@ -2,6 +2,6 @@ package com.game.item;
 
 public class Apple extends Foods{
     public Apple(String name) {
-        super(FoodType.APPLE, name, 5);
+        super(name, 5);
     }
 }

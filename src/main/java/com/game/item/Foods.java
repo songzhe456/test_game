@@ -9,18 +9,14 @@ import java.util.Objects;
 public class Foods extends Item{
     Logger logger = LoggerFactory.getLogger(Foods.class);
     private static double healthResume;
-    public Foods(FoodType type,String name,double healthResume) {
-        this.healthResume = healthResume;
+    public Foods(String name, double healthResume) {
         super(ItemType.FOODS, name);
+        Foods.healthResume = healthResume;
+
     }
     public void eat(Entity entity){
         entity.setHealth(entity.getHealth() + healthResume);
         logger.info("{}吃了{}回了{}血量",entity.getId(),this.name,healthResume);
-    }
-
-    public enum FoodType{
-        APPLE,
-        COKE
     }
 
     public static Foods create(String type, String name) {
