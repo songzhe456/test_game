@@ -13,13 +13,7 @@ public class LootEntity extends Entity{
 
     @Override
     public void attack(Entity target, double attackCrit) {
-        if (target.getHealth() > 0) {
-            logger.info("{}攻击了{}造成了{}点血量", getId(), target.getId(), Math.round(attackCrit * 10) / 10.0);
-            target.setHealth(target.getHealth() - attackCrit);
-        }
-        else {
-            logger.warn("目标{}已死亡",target);
-        }
+        super.attack(target, attackCrit);
     }
 
 }

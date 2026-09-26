@@ -13,7 +13,6 @@ public class Man extends Eater{
         super(1,EntityType.MAN, health, id);
     }
 
-
     @Override
     public double getDamage() {
         return damage;
@@ -22,8 +21,7 @@ public class Man extends Eater{
     @Override
     public void attack(Entity target, double attackCrit) {
         if (target.getHealth() > 0) {
-            logger.info("{}攻击了{}造成了{}点血量", getId(), target.getId(), Math.round(attackCrit * 10) / 10.0);
-            target.setHealth(target.getHealth() - attackCrit);
+            super.attack(target, attackCrit);
             eat(new GreatApple("great apple"),this);
         }
         else {

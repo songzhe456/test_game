@@ -85,12 +85,14 @@ public abstract class Entity implements Attack {
     public void setHealth(double health) {
         double originHealth = this.health;
         this.health = Math.max(0,health);
-        if (!isFirstSummon()) {
+        if (!isFirstSummon() && move != null) {
             logger.info("{}的血量由{}变为{}，位置是{}", id, originHealth, Math.round(health - (Math.round((critValue) * 10 / 10.0))),this.move);
         }
         else if(originHealth == 0 && isFirstSummon){
             logger.info("{}刚被生成，血量已由{}变为{}", id, originHealth, Math.round(health * 10) / 10.0);
             setFirstSummon(false);
+        } else if (!isFirstSummon()) {
+            logger.info("{}的血量由{}变为{}", id, originHealth, Math.round(health - (Math.round((critValue) * 10 / 10.0))));
         }
     }
 
@@ -132,8 +134,8 @@ public abstract class Entity implements Attack {
 
     public void attack(Entity target, double critValue){
         if(target.getHealth() > 0) {
-            logger.info("{}攻击了{}造成了{}点血量", getId(), target.getId(), Math.round((getDamage() / critValue) * 10) / 10.0);
-            target.setHealth(target.getHealth() - (getDamage() / critValue));
+            logger.info("{}攻击了{}造成了{}点血量", getId(), target.getId(),critValue);
+            target.setHealth(target.getHealth() - critValue);
         }
         else {
             target.die();
@@ -173,5 +175,14 @@ public abstract class Entity implements Attack {
 
     public EntityType getType() {
         return type;
+    }
+
+    public void tick(){
+        boolean needTick = true;
+        while (!this.isDead && needTick){
+            attack(GameRoll.getEntities().get(RandomUtil.getRandInt(0,GameRoll.getEntities().size() - 1)),this.getCritValue());
+            logger.info("{}完成了一次初始行动",id);
+            needTick = false;
+        }
     }
 }
