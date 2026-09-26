@@ -26,8 +26,9 @@ public class Entities {
         divisionZeroEntity = getEntities().get(5);
         chinese = getEntities().get(6);
         randomEntity = getEntities().get(7);
-        for(int i = 0;i < GameRoll.getEntities().size();i++){
-            GameRoll.getEntities().get(i).tick();
+        for(Entity entity:GameRoll.getEntities()){
+            entity.setCritValue(10);
+            entity.tick();
         }
 
         logger.debug("实体列表目前为{},大小为{}", getEntities(), getEntities().size());
