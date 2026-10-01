@@ -7,7 +7,7 @@ logs/
 cp.txt
 LOG_PATH_IS_UNDEFINED
 src/main/java/com/test/
-.idea/
+.idea
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

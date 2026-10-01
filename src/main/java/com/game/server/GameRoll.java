@@ -22,12 +22,12 @@ public class GameRoll implements Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(GameRoll.class);
     private static int ROLL_COUNT = 1;
     private static int reTries = 0;
-    private static final ArrayList<Entity> entityList = new ArrayList<>();
-    private static final ArrayList<Item> itemList = new ArrayList<>();
+    private static final ArrayList<Entity> ENTITY_LIST = new ArrayList<>();
+    private static final ArrayList<Item> ITEM_LIST = new ArrayList<>();
     private static Item apple;
     private static Item nullItem;
-    private static final Fight fight = new Fight();
-    private static final Command command = new Command();
+    private static final Fight FIGHT = new Fight();
+    private static final Command COMMAND = new Command();
 
     public static void initItem() {
         apple = getItems().get(0);
@@ -36,15 +36,15 @@ public class GameRoll implements Runnable {
 
     public static void addEntity(int index, Entity entity) {
         try {
-            entityList.add(index, entity);
+            ENTITY_LIST.add(index, entity);
         } catch (Exception e) {
             LOGGER.error("实体列表扩充失败：",e);
-            entityList.add(index,null);
+            ENTITY_LIST.add(index,null);
         }
     }
 
     public static void addItem(Item item) {
-        itemList.add(item);
+        ITEM_LIST.add(item);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class GameRoll implements Runnable {
                 new Entities().summon();
                 try {
                     Runnable rollRunnable = () -> {
-                        LOGGER.info("回合线程内实体列表目前为{},大小为{}", entityList, entityList.size());
+                        LOGGER.info("回合线程内实体列表目前为{},大小为{}", ENTITY_LIST, ENTITY_LIST.size());
                         while (true) {
                             try {
                                 LOGGER.info("---第{}轮---", ROLL_COUNT);
@@ -108,13 +108,13 @@ public class GameRoll implements Runnable {
                                 }
                                 System.out.println("请选择要移动的实体");
                                 try {
-                                    Entity chosen = command.chooseEntity();
-                                    command.scanMove(chosen, chosen.getId());
+                                    Entity chosen = COMMAND.chooseEntity();
+                                    COMMAND.scanMove(chosen, chosen.getId());
                                 } catch (Exception e) {
                                     LOGGER.warn("实体不存在");
                                 }
                                 System.out.println("请输入攻击者(输入exit退出)");
-                                Entity attacker = command.chooseEntity();
+                                Entity attacker = COMMAND.chooseEntity();
                                 Entity attackerEntity = null;
                                 if (attacker != null)
                                     switch (attacker.getType()) {
@@ -149,7 +149,7 @@ public class GameRoll implements Runnable {
                                     LOGGER.warn("攻击者不存在");
                                 }
                                 System.out.println("请输入攻击目标(输入exit退出)");
-                                Entity target = command.chooseEntity();
+                                Entity target = COMMAND.chooseEntity();
                                 Entity targetEntity = null;
                                 if(target != null) {
                                     switch (target.getType()) {
@@ -169,7 +169,7 @@ public class GameRoll implements Runnable {
                                             targetEntity = nullEntity;
                                             break;
                                         case RANDOM_ENTITY:
-                                            attackerEntity = randomEntity;
+                                            targetEntity = randomEntity;
                                             break;
                                         case DIVISION_ZERO:
                                             targetEntity = divisionZeroEntity;
@@ -184,7 +184,7 @@ public class GameRoll implements Runnable {
                                 else {
                                     LOGGER.warn("目标不存在");
                                 }
-                                fight.fight(attackerEntity, targetEntity);
+                                FIGHT.fight(attackerEntity, targetEntity);
                                 LOGGER.debug("目前实体列表为{}", GameRoll.getEntities());
                                 if (ROLL_COUNT >= 999) {
                                     try {
@@ -225,7 +225,7 @@ public class GameRoll implements Runnable {
             } catch (Exception e) {
                 LOGGER.error("物品创建出现异常", e);
             } finally {
-                LOGGER.info("当前物品列表为{}", itemList);
+                LOGGER.info("当前物品列表为{}", ITEM_LIST);
             }
         };
         return new Thread(createItemRunnable, "Item Create Thread");
@@ -255,11 +255,11 @@ public class GameRoll implements Runnable {
     }
 
     public static ArrayList<Entity> getEntities() {
-        return entityList;
+        return ENTITY_LIST;
     }
 
     public static ArrayList<Item> getItems() {
-        return itemList;
+        return ITEM_LIST;
     }
 
     public static void entityMove(Entity entity, Direction.Directions directions, String id, BodyPart part) {

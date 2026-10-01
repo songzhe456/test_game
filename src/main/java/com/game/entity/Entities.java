@@ -37,7 +37,7 @@ public class Entities {
     public void summon(){
         try {
             try {
-                Entity.summon(Entity.EntityType.COW, Double.NaN, "cow");
+                Entity.summon(Entity.EntityType.COW, 115, "cow");
                 Entity.summon(Entity.EntityType.MAN, 150, "man");
                 Entity.summon(Entity.EntityType.NULL, 150, "bruce");
                 Entity.summon(Entity.EntityType.KFC, 200, "kfc entity");
