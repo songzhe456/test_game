@@ -1,7 +1,6 @@
 package com.game.entity;
 
 import com.game.func.Crit;
-import com.game.item.Coke;
 import com.game.item.Foods;
 import com.game.item.Item;
 import com.game.server.GameRoll;
@@ -24,8 +23,16 @@ public class KFCEntity extends Eater{
             LOGGER.info("肯德基攻击！");
             super.attack(target, attackCrit);
             for(Item item:GameRoll.getItems()) {
-                if(Objects.equals(item.name, "coke")) {
-                    eat((Foods)item, this);
+                try {
+                    if (!(item instanceof Foods)) {
+                        continue;
+                    }
+                    if (Objects.equals(item.name, "coke")) {
+                        eat((Foods) item, this);
+                    }
+                } catch (Exception e) {
+                    LOGGER.warn("{}食用动作被取消，原因：",this.getId(),e);
+                    return;
                 }
             }
         }
