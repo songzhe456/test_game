@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Objects;
 
 public class Foods extends Item{
-    Logger logger = LoggerFactory.getLogger(Foods.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Foods.class);
     private static double healthResume;
     public Foods(String name, double healthResume) {
         super(ItemType.FOODS, name);
@@ -16,7 +16,7 @@ public class Foods extends Item{
     }
     public void eat(Entity entity){
         entity.setHealth(entity.getHealth() + healthResume);
-        logger.info("{}吃了{}回了{}血量",entity.getId(),this.name,healthResume);
+        LOGGER.info("{}吃了{}回了{}血量",entity.getId(),this.name,healthResume);
     }
 
     public static Foods create(String type, String name) {

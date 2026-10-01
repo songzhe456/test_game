@@ -1,5 +1,6 @@
 package com.game.func;
 
+import com.game.client.Config;
 import com.game.entity.Entity;
 import com.game.entity.func.Direction;
 import com.game.server.GameRoll;
@@ -11,10 +12,10 @@ import java.util.Scanner;
 import static com.game.entity.func.BodyPart.FOOT;
 
 public class Command {
-    Logger logger = LoggerFactory.getLogger(Command.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Command.class);
 
     public void scanMove(Entity entity, String id) {
-        Scanner scanMove = new Scanner(System.in);
+        Scanner scanMove = Config.INPUT_SCANNER;
         System.out.println("请输入方向");
         String direction = scanMove.nextLine();
         try {
@@ -42,12 +43,12 @@ public class Command {
                     break;
             }
         } catch (Exception e) {
-            logger.warn("位置不合法");
+            LOGGER.warn("位置不合法");
         }
     }
 
     public Entity chooseEntity() {
-        Scanner chooser = new Scanner(System.in);
+        Scanner chooser = Config.INPUT_SCANNER;
         String entity = chooser.nextLine();
         Entity chosen = null;
         try {
@@ -57,7 +58,7 @@ public class Command {
                 }
             }
         } catch (Exception e) {
-            logger.warn("该实体不存在");
+            LOGGER.warn("该实体不存在");
             return null;
         }
         return chosen;

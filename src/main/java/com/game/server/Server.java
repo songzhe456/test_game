@@ -14,8 +14,8 @@ import java.net.InetSocketAddress;
 
 public class Server {
     private static ChannelFuture channelFuture;
-    private int port;
-    private static final Logger logger = LoggerFactory.getLogger(Server.class);
+    private final int port;
+    private static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
 
     public Server(int port){
         this.port = port;
@@ -25,7 +25,7 @@ public class Server {
         EventLoopGroup group = new NioEventLoopGroup();
         try {
             ServerBootstrap serverBootstrap = new ServerBootstrap();
-            logger.info("服务器已启动");
+            LOGGER.info("服务器已启动");
             serverBootstrap.group(group)
                     .channel(NioServerSocketChannel.class)
                     .localAddress(new InetSocketAddress(port))
@@ -37,11 +37,11 @@ public class Server {
                     });
 
             channelFuture = serverBootstrap.bind().sync();
-            logger.info("正在监听{}",channelFuture.channel().localAddress());
+            LOGGER.info("正在监听{}",channelFuture.channel().localAddress());
 
             channelFuture.channel().closeFuture().sync();
         } catch (Exception e) {
-            logger.error("服务器出现异常：", e);
+            LOGGER.error("服务器出现异常：", e);
         }
         finally {
             group.shutdownGracefully().sync();

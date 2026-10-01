@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Window extends Application {
-    Logger logger = LoggerFactory.getLogger(Window.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Window.class);
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -19,7 +19,7 @@ public class Window extends Application {
         primaryStage.setTitle("实体大乱斗");
         primaryStage.setScene(scene);
         primaryStage.show();
-        logger.info("窗口已显示");
+        LOGGER.info("窗口已显示");
         while(true) {
             if (!primaryStage.isShowing()) {
                 label = null;
@@ -27,7 +27,7 @@ public class Window extends Application {
                 scene = null;
                 primaryStage.close();
                 if (scene == null) {
-                    logger.info("窗口已关闭");
+                    LOGGER.info("窗口已关闭");
                     break;
                 }
             }

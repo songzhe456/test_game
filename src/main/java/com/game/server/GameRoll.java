@@ -14,20 +14,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import static com.game.entity.Entities.*;
 
 public class GameRoll implements Runnable {
 
-    private static final Logger logger = LoggerFactory.getLogger(GameRoll.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GameRoll.class);
     private static int ROLL_COUNT = 1;
     private static int reTries = 0;
     private static final ArrayList<Entity> entityList = new ArrayList<>();
     private static final ArrayList<Item> itemList = new ArrayList<>();
     private static Item apple;
     private static Item nullItem;
-    private static boolean isCrashed;
     private static final Fight fight = new Fight();
     private static final Command command = new Command();
 
@@ -37,7 +35,12 @@ public class GameRoll implements Runnable {
     }
 
     public static void addEntity(int index, Entity entity) {
-        entityList.add(index, entity);
+        try {
+            entityList.add(index, entity);
+        } catch (Exception e) {
+            LOGGER.error("实体列表扩充失败：",e);
+            entityList.add(index,null);
+        }
     }
 
     public static void addItem(Item item) {
@@ -56,11 +59,11 @@ public class GameRoll implements Runnable {
                 new Config().configCheck();
                 verify();
             } catch (Exception e) {
-                logger.warn("验证出现异常,服务端即将关闭", e);
+                LOGGER.warn("验证出现异常,服务端即将关闭", e);
                 System.exit(1);
             }
         } catch (Exception e) {
-            logger.error("运行时出现异常", e);
+            LOGGER.error("运行时出现异常", e);
         }
     }
 
@@ -72,10 +75,10 @@ public class GameRoll implements Runnable {
                 new Entities().summon();
                 try {
                     Runnable rollRunnable = () -> {
-                        logger.info("回合线程内实体列表目前为{},大小为{}", entityList, entityList.size());
+                        LOGGER.info("回合线程内实体列表目前为{},大小为{}", entityList, entityList.size());
                         while (true) {
                             try {
-                                logger.info("---第{}轮---", ROLL_COUNT);
+                                LOGGER.info("---第{}轮---", ROLL_COUNT);
                                 if (man != null && man.getHealth() <= 0) {
                                     man.die();
                                     man = null;
@@ -101,14 +104,14 @@ public class GameRoll implements Runnable {
                                     randomEntity.die();
                                     randomEntity = null;
                                 } else {
-                                    logger.warn("所有实体都已在场");
+                                    LOGGER.warn("所有实体都已在场");
                                 }
                                 System.out.println("请选择要移动的实体");
                                 try {
                                     Entity chosen = command.chooseEntity();
                                     command.scanMove(chosen, chosen.getId());
                                 } catch (Exception e) {
-                                    logger.warn("实体不存在");
+                                    LOGGER.warn("实体不存在");
                                 }
                                 System.out.println("请输入攻击者(输入exit退出)");
                                 Entity attacker = command.chooseEntity();
@@ -140,10 +143,10 @@ public class GameRoll implements Runnable {
                                             attackerEntity = chinese;
                                             break;
                                         default:
-                                            logger.warn("{}不存在", attacker);
+                                            LOGGER.warn("{}不存在", attacker);
                                     }
                                 else {
-                                    logger.warn("攻击者不存在");
+                                    LOGGER.warn("攻击者不存在");
                                 }
                                 System.out.println("请输入攻击目标(输入exit退出)");
                                 Entity target = command.chooseEntity();
@@ -175,25 +178,25 @@ public class GameRoll implements Runnable {
                                             targetEntity = chinese;
                                             break;
                                         default:
-                                            logger.warn("{}不存在", target);
+                                            LOGGER.warn("{}不存在", target);
                                     }
                                 }
                                 else {
-                                    logger.warn("目标不存在");
+                                    LOGGER.warn("目标不存在");
                                 }
                                 fight.fight(attackerEntity, targetEntity);
-                                logger.debug("目前实体列表为{}", GameRoll.getEntities());
+                                LOGGER.debug("目前实体列表为{}", GameRoll.getEntities());
                                 if (ROLL_COUNT >= 999) {
                                     try {
                                         throw new RuntimeException("达到回合上限");
                                     } catch (Exception e) {
-                                        logger.error(e.getMessage(), e);
+                                        LOGGER.error(e.getMessage(), e);
                                         System.exit(-1);
                                     }
                                 }
                                 ROLL_COUNT += 1;
                             } catch (Exception e) {
-                                logger.error("循环出现异常", e);
+                                LOGGER.error("循环出现异常", e);
                                 return;
                             }
                         }
@@ -202,14 +205,14 @@ public class GameRoll implements Runnable {
                     rollThread.setName("Roll Thread");
                     rollThread.start();
                 } catch (Exception e) {
-                    logger.error("回合线程发生如下异常：", e);
+                    LOGGER.error("回合线程发生如下异常：", e);
                 }
             };
             Thread createEntityThread = new Thread(createEntityRunnable);
             createEntityThread.setName("Entity Summon Thread");
             createEntityThread.start();
         } catch (Exception e) {
-            logger.error("实体生成线程出现异常", e);
+            LOGGER.error("实体生成线程出现异常", e);
         }
     }
 
@@ -220,9 +223,9 @@ public class GameRoll implements Runnable {
                 Item.create("null", null);
                 initItem();
             } catch (Exception e) {
-                logger.error("物品创建出现异常", e);
+                LOGGER.error("物品创建出现异常", e);
             } finally {
-                logger.info("当前物品列表为{}", itemList);
+                LOGGER.info("当前物品列表为{}", itemList);
             }
         };
         return new Thread(createItemRunnable, "Item Create Thread");
@@ -230,24 +233,24 @@ public class GameRoll implements Runnable {
 
     public void verify() {
         if (Config.NEED_VERIFY && Server.ServerHandler.getContent() != null && (Server.ServerHandler.getContent().contains("战斗") && (Server.ServerHandler.getContent().contains("强") || Server.ServerHandler.getContent().contains("good") || Server.ServerHandler.getContent().contains("好") || Server.ServerHandler.getContent().contains("爽")))) {
-            logger.info("成功接收到客户端传入的“{}”战前祝词，即将开始战斗", Server.ServerHandler.getContent());
+            LOGGER.info("成功接收到客户端传入的“{}”战前祝词，即将开始战斗", Server.ServerHandler.getContent());
             fight();
         } else if (Config.NEED_VERIFY && Server.ServerHandler.getContent() == null && reTries < 3) {
             while (true) {
-                logger.warn("消息获取失败，即将重试");
+                LOGGER.warn("消息获取失败，即将重试");
                 reTries += 1;
                 if (reTries >= 3) {
-                    logger.warn("重试次数已达上限（{}次）", reTries);
+                    LOGGER.warn("重试次数已达上限（{}次）", reTries);
                     break;
                 }
             }
         } else if (Config.NEED_VERIFY && Server.ServerHandler.getContent() != null && (!Server.ServerHandler.getContent().contains("战斗") || (!Server.ServerHandler.getContent().contains("强") || !Server.ServerHandler.getContent().contains("good") || !Server.ServerHandler.getContent().contains("好") || !Server.ServerHandler.getContent().contains("爽")))) {
             throw new NegativeClientException("客户端的战斗祝词不够有劲");
         } else if (!Config.NEED_VERIFY) {
-            logger.info("可直接开战");
+            LOGGER.info("可直接开战");
             fight();
         } else {
-            logger.warn("程序未触发分支");
+            LOGGER.warn("程序未触发分支");
         }
     }
 
@@ -261,6 +264,6 @@ public class GameRoll implements Runnable {
 
     public static void entityMove(Entity entity, Direction.Directions directions, String id, BodyPart part) {
         entity.move(directions, id);
-        logger.info("{}的{}往{}移动了", id, part,directions);
+        LOGGER.info("{}的{}往{}移动了", id, part,directions);
     }
 }

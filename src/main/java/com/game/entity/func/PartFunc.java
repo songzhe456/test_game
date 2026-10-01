@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PartFunc {
-    Logger logger = LoggerFactory.getLogger(PartFunc.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PartFunc.class);
     private Entity boundEntity;
     private BodyPart boundPart;
     private Direction.Directions boundDirection;
@@ -19,6 +19,6 @@ public class PartFunc {
         this.boundEntity = entity;
         this.boundPart = part;
         this.boundDirection = direction;
-        logger.info("{}已与{}绑定",part,entity);
+        LOGGER.info("{}已与{}绑定",part,entity);
     }
 }

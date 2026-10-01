@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.net.InetSocketAddress;
 
 public class Client {
-    private static final Logger logger = LoggerFactory.getLogger(Client.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Client.class);
     private final String host;
     private final int port;
     static ChannelFuture future;
@@ -41,7 +41,7 @@ public class Client {
                 future.channel().writeAndFlush(Unpooled.copiedBuffer(Config.FIGHT_WORD, CharsetUtil.UTF_8));
             }
             else {
-                logger.info("战斗贺词被跳过");
+                LOGGER.info("战斗贺词被跳过");
             }
             future.channel().closeFuture().sync();
         }

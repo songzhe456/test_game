@@ -7,9 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Cow extends Eater{
-    private double damage = 20;
-    private static final EntityType cow = EntityType.COW;
-    private static final Logger logger = LoggerFactory.getLogger(Cow.class);
+    private final double damage = 20;
+    private static final Logger LOGGER = LoggerFactory.getLogger(Cow.class);
     public Cow(double health, String id) {
         super(0,EntityType.COW,health, id);
     }
@@ -22,11 +21,10 @@ public class Cow extends Eater{
         }
         else {
             target.die();
-            logger.warn("目标{}已死亡",target);
+            LOGGER.warn("目标{}已死亡",target);
         }
     }
 
-    @Override
     public double getDamage() {
         return damage;
     }

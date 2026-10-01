@@ -2,12 +2,11 @@ package com.game.item;
 
 import com.game.func.ExceptionUtils;
 import com.game.server.GameRoll;
-import com.game.server.Server;
 
 import java.util.Objects;
 
 public abstract class Item {
-    String name;
+    public final String name;
     public Item(ItemType type,String name)  {
         this.name = name;
         ExceptionUtils.nullPointerExceptionTrigger(type);

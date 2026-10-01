@@ -16,21 +16,20 @@ public class RandomPool {
     private static final String MAN_ENTITY_ID = "man";
 
     private static final Logger logger = LoggerFactory.getLogger(RandomPool.class);
-    private static RandomUtil randomUtil = new RandomUtil();
-    private static int randomNum = randomUtil.getRandInt(LOWEST,MAXIMUM);
+    private static final int RANDOM_NUM = RandomUtil.getRandInt(LOWEST,MAXIMUM);
     public static class RandomEntity extends Entity{
         public RandomEntity(double health, String id) {
-            super(7,Entity.EntityType.values()[randomNum], health, id);
+            super(7,Entity.EntityType.values()[RANDOM_NUM], health, id);
         }
 
         //此方法会返回随机实体类型
         public  static EntityType getRandType(){
-            return EntityType.values()[randomNum];
+            return EntityType.values()[RANDOM_NUM];
         }
 
         @Override
         public void attack(Entity target, double health) {
-            double attackCrit = new Crit().getCrit(getDamage(),getCritValue());
+            double attackCrit = new Crit().getCrit(getCritValue(),getCritValue());
             target.setHealth(target.getHealth() - attackCrit);
             logger.info("{}攻击了{}造成了{}点血量", getId(), target.getId(), Math.round(attackCrit * 10) / 10.0);
         }
@@ -38,21 +37,21 @@ public class RandomPool {
 
     @Deprecated
     public static void generateRandomEntity(){
-        switch (randomNum){
+        switch (RANDOM_NUM){
             case (0):{
-                RandomEntity nullEntity = new RandomEntity(RandomUtil.getRandDouble(LOWEST_HP, 30),NULL_ENTITY_ID);
+                new RandomEntity(RandomUtil.getRandDouble(LOWEST_HP, 30), NULL_ENTITY_ID);
                 break;
             }
             case (1):{
-                RandomEntity defaultEntity = new RandomEntity(RandomUtil.getRandDouble(LOWEST_HP, 30),DEFAULT_ENTITY_ID);
+                new RandomEntity(RandomUtil.getRandDouble(LOWEST_HP, 30),DEFAULT_ENTITY_ID);
                 break;
             }
             case (2): {
-                RandomEntity cow = new RandomEntity(RandomUtil.getRandDouble(LOWEST_HP, 30), COW_ENTITY_ID);
+                new RandomEntity(RandomUtil.getRandDouble(LOWEST_HP, 30), COW_ENTITY_ID);
                 break;
             }
             case (3): {
-                RandomEntity man = new RandomEntity(RandomUtil.getRandDouble(LOWEST_HP, 30), MAN_ENTITY_ID);
+                new RandomEntity(RandomUtil.getRandDouble(LOWEST_HP, 30), MAN_ENTITY_ID);
                 break;
             }
         }

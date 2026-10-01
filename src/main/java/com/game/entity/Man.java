@@ -6,14 +6,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Man extends Eater{
-    private static Logger logger = LoggerFactory.getLogger(Man.class);
-    private double damage = 50;
+    private static final Logger LOGGER = LoggerFactory.getLogger(Man.class);
+    private final double damage = 50;
 
     public Man(double health, String id) {
         super(1,EntityType.MAN, health, id);
     }
 
-    @Override
     public double getDamage() {
         return damage;
     }
@@ -25,7 +24,7 @@ public class Man extends Eater{
             eat(new GreatApple("great apple"),this);
         }
         else {
-            logger.warn("目标{}已死亡",target);
+            LOGGER.warn("目标{}已死亡",target);
         }
     }
 

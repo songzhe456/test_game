@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class KFCEntity extends Eater{
-    private static Logger logger = LoggerFactory.getLogger(KFCEntity.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(KFCEntity.class);
     private final double damage = 30;
     private final double attackCrit = new Crit().getCrit(damage,getCritValue());
     public KFCEntity(double health, String id) {
@@ -17,12 +17,12 @@ public class KFCEntity extends Eater{
     @Override
     public void attack(Entity target, double attackCrit) {
         if (target.getHealth() > 0) {
-            logger.info("肯德基攻击！");
+            LOGGER.info("肯德基攻击！");
             super.attack(target, attackCrit);
             eat(new Coke("coke"),this);
         }
         else {
-            logger.warn("目标{}已死亡",target);
+            LOGGER.warn("目标{}已死亡",target);
         }
     }
 

@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import static com.game.server.GameRoll.getEntities;
 
 public class Entities {
-    static Logger logger = LoggerFactory.getLogger(Entities.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Entities.class);
     public static Entity cow;
     public static Entity man;
     public static Entity nullEntity;
@@ -31,13 +31,13 @@ public class Entities {
             entity.tick();
         }
 
-        logger.debug("实体列表目前为{},大小为{}", getEntities(), getEntities().size());
+        LOGGER.debug("实体列表目前为{},大小为{}", getEntities(), getEntities().size());
     }
 
     public void summon(){
         try {
             try {
-                Entity.summon(Entity.EntityType.COW, 150, "cow");
+                Entity.summon(Entity.EntityType.COW, Double.NaN, "cow");
                 Entity.summon(Entity.EntityType.MAN, 150, "man");
                 Entity.summon(Entity.EntityType.NULL, 150, "bruce");
                 Entity.summon(Entity.EntityType.KFC, 200, "kfc entity");
@@ -47,15 +47,15 @@ public class Entities {
                 try {
                     Entity.summon(Entity.EntityType.RANDOM_ENTITY, RandomUtil.getRandDouble(0, 1000), "[随机实体]" + RandomPool.RandomEntity.getRandType().toString());
                 } catch (Exception e) {
-                    logger.error("生成随机实体时出现如下异常：", e);
+                    LOGGER.error("生成随机实体时出现如下异常：", e);
                 }
             } catch (Exception e) {
-                logger.error("生成实体时出现异常", e);
+                LOGGER.error("生成实体时出现异常", e);
             }
 
             initEntity();
         } catch (Exception e) {
-            logger.error("生成实体及初始化时出现异常", e);
+            LOGGER.error("生成实体及初始化时出现异常", e);
         }
     }
 }

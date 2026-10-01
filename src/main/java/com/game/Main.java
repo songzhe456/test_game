@@ -10,14 +10,14 @@ import org.slf4j.LoggerFactory;
 import java.util.Scanner;
 
 public class Main {
-    private static final Logger logger = LoggerFactory.getLogger(Main.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);;
 
     public static void main(String[] args) {
         Runnable runnable = () -> {
             try {
-                logger.info("程序开始运行");
+                LOGGER.info("程序开始运行");
                 User user = new User();
-                Scanner clientOrServerChoose = new Scanner(System.in);
+                Scanner clientOrServerChoose = Config.INPUT_SCANNER;
 
                 //当配置NEED_INPUT为true时用户需要输入祝战贺词(除此处和选择启动端，其他输入暂时不受影响)
                 if (Config.NEED_INPUT) {
@@ -27,14 +27,14 @@ public class Main {
                     try {
                         new Server(8888).run();
                     } catch (Exception e) {
-                        logger.error("服务器线程出现异常", e);
+                        LOGGER.error("服务器线程出现异常", e);
                     }
                 };
                 Runnable clientRunnable = () -> {
                     try {
                         new Client("127.0.0.1",8888).run();
                     } catch (Exception e) {
-                        logger.error("客户端线程出现异常", e);
+                        LOGGER.error("客户端线程出现异常", e);
                     }
                 };
                 if (Config.NEED_INPUT) {
@@ -61,7 +61,7 @@ public class Main {
                         }
                     }
                 } else {
-                    logger.info("已自动选择all");
+                    LOGGER.info("已自动选择all");
                     Thread serverThread = new Thread(serverRunnable);
                     serverThread.setName("Server Thread");
                     serverThread.start();
@@ -70,7 +70,7 @@ public class Main {
                     clientThread.start();
                 }
             } catch (Exception e) {
-                logger.error("程序出现异常", e);
+                LOGGER.error("程序出现异常", e);
             }
         };
 

@@ -14,13 +14,11 @@ import org.slf4j.LoggerFactory;
 public abstract class Entity implements Attack {
     private double health;
     private String id;
-    private double damage;
-    private EntityType type;
+    private final EntityType type;
     private boolean isDead;
     private double critValue;
-    private static final Logger logger = LoggerFactory.getLogger(Entity.class);
-    private static String ownerId;
-    private static boolean isFirstSummon;
+    private static final Logger LOGGER = LoggerFactory.getLogger(Entity.class);
+    private boolean isFirstSummon;
     private Move move;
 
     public Entity(int index,EntityType type,double health,String id){
@@ -29,20 +27,14 @@ public abstract class Entity implements Attack {
         setHealth(health);
         if(type != EntityType.LOOT) {
             entitySummoned(health, id);
-        } else if (type == EntityType.LOOT) {
+        } else {
             Item lootInLoot = GameRoll.getItems().get(RandomUtil.getRandInt(0, GameRoll.getItems().size() - 1));
             GameRoll.getItems().add(lootInLoot);
             lootEntitySummoned(health,id, lootInLoot);
         }
         ExceptionUtils.nullPointerExceptionTrigger(type);
-        if (health <= 0 || isDead){
-            die();
-        }
         GameRoll.addEntity(index,this);
-    }
-
-    public  double getDamage() {
-        return this.damage;
+        setFirstSummon(true);
     }
 
     public double getCritValue() {
@@ -53,11 +45,11 @@ public abstract class Entity implements Attack {
         this.critValue = critValue;
     }
 
-    public static boolean isFirstSummon() {
+    public boolean isFirstSummon() {
         return isFirstSummon;
     }
 
-    public static void setFirstSummon(boolean firstSummon) {
+    public void setFirstSummon(boolean firstSummon) {
         isFirstSummon = firstSummon;
     }
 
@@ -86,13 +78,13 @@ public abstract class Entity implements Attack {
         double originHealth = this.health;
         this.health = Math.max(0,health);
         if (!isFirstSummon() && move != null) {
-            logger.info("{}的血量由{}变为{}，位置是{}", id, originHealth, Math.round(health - (Math.round((critValue) * 10 / 10.0))),this.move);
+            LOGGER.info("{}的血量由{}变为{}，位置是{}", id, originHealth, health,this.move);
         }
         else if(originHealth == 0 && isFirstSummon){
-            logger.info("{}刚被生成，血量已由{}变为{}", id, originHealth, Math.round(health * 10) / 10.0);
+            LOGGER.info("{}刚被生成，血量已由{}变为{}", id, originHealth, health);
             setFirstSummon(false);
         } else if (!isFirstSummon()) {
-            logger.info("{}的血量由{}变为{}", id, originHealth, Math.round(health - (Math.round((critValue) * 10 / 10.0))));
+            LOGGER.info("{}的血量由{}变为{}", id, originHealth, health);
         }
     }
 
@@ -101,27 +93,22 @@ public abstract class Entity implements Attack {
     }
 
     public static void entitySummoned(double health,String id){
-        logger.info("生成了{}:[\n    hp:{}\n]", id, health);
+        LOGGER.info("生成了{}:[\n    hp:{}\n]", id, health);
     }
 
     public void lootEntitySummoned(double health, String id, Item item){
-        logger.info("生成了{}:[\n    hp:{}\n    loots:{}\n]", id, health, item);
-    }
-
-    public void damage(double health){
-        this.health -= this.damage;
+        LOGGER.info("生成了{}:[\n    hp:{}\n    loots:{}\n]", id, health, item);
     }
 
     public void die(){
         Runnable entityDieRunnable = () -> {
-            logger.info("{}死了", id);
+            LOGGER.info("{}死了", id);
             this.health = 0;
             isDead = true;
-            ownerId = id;
             Runnable lootSpawnRunnable = () -> {
                 GameRoll.getEntities().remove(this);
-                LootEntity entityLoot = new LootEntity(EntityType.LOOT, 5.0, id + "'s loot");
-                logger.debug("有实体死亡，当前实体列表为{}",GameRoll.getEntities());
+                summon(EntityType.LOOT, 5.0, id + "'s loot");
+                LOGGER.debug("有实体死亡，当前实体列表为{}",GameRoll.getEntities());
             };
             Thread lootSpawnThread = new Thread(lootSpawnRunnable);
             lootSpawnThread.setName("Loot Spawn Thread");
@@ -134,23 +121,21 @@ public abstract class Entity implements Attack {
 
     public void attack(Entity target, double critValue){
         if(target.getHealth() > 0) {
-            logger.info("{}攻击了{}造成了{}点血量", this.getId(), target.getId(),this.critValue);
+            LOGGER.info("{}攻击了{}造成了{}点血量", this.getId(), target.getId(),this.critValue);
             target.setHealth(target.getHealth() - this.critValue);
         }
         else {
-            target.die();
-            logger.warn("目标{}已死亡",target);
+            LOGGER.warn("目标{}已死亡",target);
         }
     }
 
-    public static Entity summon(EntityType type,double health,String id) {
+    public static Entity summon(EntityType type, double health, String id) {
         try {
-            setFirstSummon(true);
             return switch (type) {
                 case NULL -> new NullEntity(health, id);
                 case COW -> new Cow(health, id);
                 case MAN -> new Man(health, id);
-                case LOOT -> new LootEntity(type, health, id);
+                case LOOT -> new LootEntity(health, id);
                 case KFC -> new KFCEntity(health, id);
                 case MOUSE -> new Mouse(health, id);
                 case RANDOM_ENTITY -> new RandomPool.RandomEntity(health, id);
@@ -159,7 +144,7 @@ public abstract class Entity implements Attack {
                 default -> new Cow(health, "实体生成出错");
             };
         } catch (Exception e) {
-            logger.error("{}生成失败",id,e);
+            LOGGER.error("{}生成失败",id,e);
             return null;
         }
     }
@@ -180,9 +165,14 @@ public abstract class Entity implements Attack {
     public void tick(){
         boolean needTick = true;
         while (!this.isDead && needTick){
-            attack(GameRoll.getEntities().get(RandomUtil.getRandInt(0,GameRoll.getEntities().size() - 1)),this.getCritValue());
-            logger.info("{}完成了一次初始行动",id);
-            needTick = false;
+            try {
+                attack(GameRoll.getEntities().get(RandomUtil.getRandInt(0, GameRoll.getEntities().size() - 1)), this.getCritValue());
+                LOGGER.info("{}完成了一次初始行动", id);
+                needTick = false;
+            } catch (Exception e) {
+                LOGGER.error("实体tick异常");
+                break;
+            }
         }
     }
 }

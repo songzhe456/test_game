@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Move {
-    private static final Logger logger = LoggerFactory.getLogger(Move.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Move.class);
     private float x;
     private float y;
     private float z;
@@ -32,7 +32,7 @@ public class Move {
             case NONE:
                 break;
             default:
-                logger.warn("{}未移动",id);
+                LOGGER.warn("{}未移动",id);
         }
     }
 
