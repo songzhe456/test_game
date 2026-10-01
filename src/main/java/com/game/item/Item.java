@@ -34,7 +34,7 @@ public abstract class Item {
         }
     }
 
-    public void remove(Item item){
+    public static void remove(Item item){
         GameRoll.getItems().remove(item);
     }
 }

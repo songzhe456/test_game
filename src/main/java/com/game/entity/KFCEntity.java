@@ -3,8 +3,12 @@ package com.game.entity;
 import com.game.func.Crit;
 import com.game.item.Coke;
 import com.game.item.Foods;
+import com.game.item.Item;
+import com.game.server.GameRoll;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Objects;
 
 public class KFCEntity extends Eater{
     private static final Logger LOGGER = LoggerFactory.getLogger(KFCEntity.class);
@@ -19,7 +23,11 @@ public class KFCEntity extends Eater{
         if (target.getHealth() > 0) {
             LOGGER.info("肯德基攻击！");
             super.attack(target, attackCrit);
-            eat(new Coke("coke"),this);
+            for(Item item:GameRoll.getItems()) {
+                if(Objects.equals(item.name, "coke")) {
+                    eat((Foods)item, this);
+                }
+            }
         }
         else {
             LOGGER.warn("目标{}已死亡",target);
