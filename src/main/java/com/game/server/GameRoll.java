@@ -142,6 +142,9 @@ public class GameRoll implements Runnable {
                                         case CHINESE:
                                             attackerEntity = chinese;
                                             break;
+                                        case POSTER:
+                                            attackerEntity = poster;
+                                            break;
                                         default:
                                             LOGGER.warn("{}不存在", attacker);
                                     }
@@ -176,6 +179,9 @@ public class GameRoll implements Runnable {
                                             break;
                                         case CHINESE:
                                             targetEntity = chinese;
+                                            break;
+                                        case POSTER:
+                                            targetEntity = poster;
                                             break;
                                         default:
                                             LOGGER.warn("{}不存在", target);

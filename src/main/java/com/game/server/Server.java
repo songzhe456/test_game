@@ -54,20 +54,27 @@ public class Server {
         return channelFuture;
     }
 
-    class ServerHandler extends ChannelInboundHandlerAdapter{
+    public static class ServerHandler extends ChannelInboundHandlerAdapter{
         private static String msg;
-        private static ByteBuf in;
         private static String content;
-        Logger logger = LoggerFactory.getLogger(ServerHandler.class);
+        private static final Logger LOGGER = LoggerFactory.getLogger(ServerHandler.class);
+
+        private static ChannelHandlerContext context;
+
         @Override
-        public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-            in = (ByteBuf) msg;
+        public void channelRead(ChannelHandlerContext ctx, Object msg) {
+            context = ctx;
+            ByteBuf in = (ByteBuf) msg;
             content = in.toString(CharsetUtil.UTF_8);
             in.release();
-            logger.info("已接收客户端传来的{}",content);
+            LOGGER.info("已接收客户端传来的{}",content);
             new GameRoll().run();
 
             ctx.writeAndFlush("服务器已接收" + content);
+        }
+
+        public static ChannelHandlerContext getContext() {
+            return context;
         }
 
         public static String getContent() {
@@ -76,7 +83,7 @@ public class Server {
 
         @Override
         public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-            logger.error("服务器处理出现异常",cause);
+            LOGGER.error("服务器处理出现异常",cause);
             ctx.close();
         }
         public static void setMsg(String msg) {
