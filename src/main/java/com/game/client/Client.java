@@ -6,6 +6,7 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.string.StringDecoder;
 import io.netty.util.CharsetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,8 @@ public class Client {
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
-                            ch.pipeline().addLast(new ClientHandler());
+                            ch.pipeline().addLast(new StringDecoder())
+                                    .addLast(new ClientHandler());
                         }
                     });
             future = bs.connect().sync();
@@ -56,7 +58,7 @@ public class Client {
 
         @Override
         protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
-            logger.info("已接收{}", msg);
+            logger.info("服务器发送了：{}", msg);
         }
 
         @Override
