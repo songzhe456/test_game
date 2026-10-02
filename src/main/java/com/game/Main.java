@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Scanner;
 
 public class Main {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);;
+    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
         Runnable runnable = () -> {

@@ -2,6 +2,7 @@ package com.game.entity;
 
 import com.game.entity.func.Direction;
 import com.game.entity.func.Move;
+import com.game.entity.poster.PacketPoster;
 import com.game.func.Attack;
 import com.game.func.ExceptionUtils;
 import com.game.item.Item;
@@ -63,7 +64,8 @@ public abstract class Entity implements Attack {
         MOUSE,
         RANDOM_ENTITY,
         DIVISION_ZERO,
-        CHINESE
+        CHINESE,
+        POSTER
     }
 
     public double getHealth() {
@@ -119,7 +121,7 @@ public abstract class Entity implements Attack {
         entityDieThread.start();
     }
 
-    public void attack(Entity target, double critValue){
+    public void attack(Entity target, double critValue) {
         if(target.getHealth() > 0) {
             LOGGER.info("{}攻击了{}扣除了{}点血量", this.getId(), target.getId(),this.critValue);
             target.setHealth(target.getHealth() - this.critValue);
@@ -141,6 +143,7 @@ public abstract class Entity implements Attack {
                 case RANDOM_ENTITY -> new RandomPool.RandomEntity(health, id);
                 case DIVISION_ZERO -> new DivisionZeroEntity(health, id);
                 case CHINESE -> new Chinese(health,id);
+                case POSTER -> new PacketPoster(health, id);
                 default -> new Cow(health, "实体生成出错");
             };
         } catch (Exception e) {
