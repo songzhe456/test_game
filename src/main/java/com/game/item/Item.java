@@ -10,7 +10,6 @@ public abstract class Item {
     public Item(ItemType type,String name)  {
         this.name = name;
         ExceptionUtils.nullPointerExceptionTrigger(type);
-        GameRoll.addItem(this);
     }
     public enum ItemType{
         FOODS,

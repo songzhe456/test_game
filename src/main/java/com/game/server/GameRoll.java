@@ -196,8 +196,7 @@ public class GameRoll implements Runnable {
                                 }
                                 ROLL_COUNT += 1;
                             } catch (Exception e) {
-                                LOGGER.error("循环出现异常", e);
-                                return;
+                                LOGGER.error("循环出现异常，但仍坚挺！", e);
                             }
                         }
                     };
