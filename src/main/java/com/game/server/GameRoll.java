@@ -218,10 +218,10 @@ public class GameRoll implements Runnable {
     private @NotNull Thread getCreateItemThread() {
         Runnable createItemRunnable = () -> {
             try {
-                Foods.create(Foods.FoodType.APPLE, "apple");
-                Foods.create(Foods.FoodType.GREAT_APPLE, "great apple");
-                Foods.create(Foods.FoodType.COKE, "coke");
-                Item.create("null", null);
+                getItems().add(Foods.create(Foods.FoodType.APPLE, "apple"));
+                getItems().add(Foods.create(Foods.FoodType.GREAT_APPLE, "great apple"));
+                getItems().add(Foods.create(Foods.FoodType.COKE, "coke"));
+                getItems().add(Item.create("null", null));
             } catch (Exception e) {
                 LOGGER.error("物品创建出现异常", e);
             } finally {
