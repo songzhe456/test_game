@@ -5,15 +5,12 @@ import com.game.entity.func.Move;
 import com.game.entity.poster.PacketPoster;
 import com.game.func.Attack;
 import com.game.func.ExceptionUtils;
-import com.game.item.Foods;
 import com.game.item.Item;
 import com.game.server.GameRoll;
 import com.game.util.RandomPool;
 import com.game.util.RandomUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
 
 public abstract class Entity implements Attack {
     private double health;

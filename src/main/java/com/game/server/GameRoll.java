@@ -22,6 +22,7 @@ public class GameRoll implements Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(GameRoll.class);
     private static int ROLL_COUNT = 1;
     private static int reTries = 0;
+    private static final ArrayList<Entity> DIED_ENTITY_LIST = new ArrayList<>();
     private static final ArrayList<Entity> ENTITY_LIST = new ArrayList<>();
     private static final ArrayList<Item> ITEM_LIST = new ArrayList<>();
     private static final Fight FIGHT = new Fight();
@@ -75,30 +76,36 @@ public class GameRoll implements Runnable {
                                 ROLL_COUNT += 1;
                                 if (man != null && man.getHealth() <= 0) {
                                     man.die();
+                                    DIED_ENTITY_LIST.add(man);
                                     man = null;
                                 } else if (cow != null && cow.getHealth() <= 0) {
                                     cow.die();
+                                    DIED_ENTITY_LIST.add(cow);
                                     cow = null;
                                 } else if (nullEntity != null && nullEntity.getHealth() <= 0) {
                                     nullEntity.die();
+                                    DIED_ENTITY_LIST.add(nullEntity);
                                     nullEntity = null;
                                 } else if (kfcEntity != null && kfcEntity.getHealth() <= 0) {
                                     kfcEntity.die();
+                                    DIED_ENTITY_LIST.add(kfcEntity);
                                     kfcEntity = null;
                                 } else if (mouse != null && mouse.getHealth() <= 0) {
                                     mouse.die();
+                                    DIED_ENTITY_LIST.add(mouse);
                                     mouse = null;
                                 } else if (divisionZeroEntity != null && divisionZeroEntity.getHealth() <= 0) {
                                     divisionZeroEntity.die();
+                                    DIED_ENTITY_LIST.add(divisionZeroEntity);
                                     divisionZeroEntity = null;
                                 } else if (chinese != null && chinese.getHealth() <= 0) {
                                     chinese.die();
+                                    DIED_ENTITY_LIST.add(chinese);
                                     chinese = null;
                                 } else if (randomEntity != null && randomEntity.getHealth() <= 0) {
                                     randomEntity.die();
+                                    DIED_ENTITY_LIST.add(randomEntity);
                                     randomEntity = null;
-                                } else {
-                                    LOGGER.warn("所有实体都已在场");
                                 }
                                 System.out.println("请选择要移动的实体");
                                 try {
@@ -187,6 +194,7 @@ public class GameRoll implements Runnable {
                                 FIGHT.fight(attackerEntity, targetEntity);
                                 LOGGER.info("目前实体列表为{}", GameRoll.getEntities());
                                 LOGGER.info("目前物品列表为{}", GameRoll.getItems());
+                                LOGGER.info("目前已死亡实体列表为{}",DIED_ENTITY_LIST);
                                 if (ROLL_COUNT >= 999) {
                                     try {
                                         throw new RuntimeException("达到回合上限");
