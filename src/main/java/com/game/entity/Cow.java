@@ -16,7 +16,7 @@ public class Cow extends Eater{
     public void attack(Entity target, double attackCrit) {
         if(target.getHealth() > 0) {
             super.attack(target, attackCrit);
-            selectFoodThenEat("apple");
+            selectFoodThenEat("apple",this);
         }
         else {
             target.die();

@@ -72,6 +72,7 @@ public class GameRoll implements Runnable {
                         while (true) {
                             try {
                                 LOGGER.info("---第{}轮---", ROLL_COUNT);
+                                ROLL_COUNT += 1;
                                 if (man != null && man.getHealth() <= 0) {
                                     man.die();
                                     man = null;
@@ -194,7 +195,6 @@ public class GameRoll implements Runnable {
                                         System.exit(-1);
                                     }
                                 }
-                                ROLL_COUNT += 1;
                             } catch (Exception e) {
                                 LOGGER.error("循环出现异常，但仍坚挺！", e);
                             }

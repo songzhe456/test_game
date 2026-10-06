@@ -15,17 +15,17 @@ public abstract class Eater extends Entity implements CanEatFood{
         super(index,type, health, id);
     }
 
-    public void selectFoodThenEat(String foodName) {
+    public void selectFoodThenEat(String foodName,Entity entity) {
         for(Item item: GameRoll.getItems()) {
             try {
                 if (!(item instanceof Foods)) {
                     continue;
                 }
                 if (Objects.equals(item.name, foodName)) {
-                    eat((Foods) item, this);
+                    eat((Foods) item, entity);
                 }
             } catch (Exception e) {
-                LOGGER.warn("{}食用动作被取消，原因：",this.getId(),e);
+                LOGGER.warn("{}食用动作被取消，原因：",entity.getId(),e);
                 return;
             }
         }

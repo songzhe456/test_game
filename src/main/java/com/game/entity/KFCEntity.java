@@ -22,7 +22,7 @@ public class KFCEntity extends Eater{
         if (target.getHealth() > 0) {
             LOGGER.info("肯德基攻击！");
             super.attack(target, attackCrit);
-            selectFoodThenEat("coke");
+            selectFoodThenEat("coke",this);
         }
         else {
             LOGGER.warn("目标{}已死亡",target);
