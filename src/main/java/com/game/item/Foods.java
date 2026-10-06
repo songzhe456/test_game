@@ -4,14 +4,12 @@ import com.game.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Objects;
-
 public class Foods extends Item{
     private static final Logger LOGGER = LoggerFactory.getLogger(Foods.class);
-    private static double healthResume;
+    private final double healthResume;
     public Foods(String name, double healthResume) {
         super(ItemType.FOODS, name);
-        Foods.healthResume = healthResume;
+        this.healthResume = healthResume;
 
     }
     public void eat(Entity entity){
@@ -19,12 +17,19 @@ public class Foods extends Item{
         LOGGER.info("{}吃了{}回了{}血量",entity.getId(),this.name,healthResume);
     }
 
-    public static Foods create(String type, String name) {
-        if(Objects.equals(type,"apple")){
-            return new Apple(name);
+    public enum FoodType{
+        APPLE,
+        GREAT_APPLE,
+        COKE
+    }
+
+    public static Foods create(FoodType type, String name) {
+        switch (type){
+            case APPLE -> new Apple(name);
+            case GREAT_APPLE -> new GreatApple(name);
+            case COKE -> new Coke(name);
+            default -> new Apple("食物创建失败");
         }
-        else {
-            return null;
-        }
+        return null;
     }
 }

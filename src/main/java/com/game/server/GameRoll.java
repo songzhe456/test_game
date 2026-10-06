@@ -24,15 +24,8 @@ public class GameRoll implements Runnable {
     private static int reTries = 0;
     private static final ArrayList<Entity> ENTITY_LIST = new ArrayList<>();
     private static final ArrayList<Item> ITEM_LIST = new ArrayList<>();
-    private static Item apple;
-    private static Item nullItem;
     private static final Fight FIGHT = new Fight();
     private static final Command COMMAND = new Command();
-
-    public static void initItem() {
-        apple = getItems().get(0);
-        nullItem = getItems().get(1);
-    }
 
     public static void addEntity(int index, Entity entity) {
         try {
@@ -225,9 +218,10 @@ public class GameRoll implements Runnable {
     private @NotNull Thread getCreateItemThread() {
         Runnable createItemRunnable = () -> {
             try {
-                Foods.create("apple", "apple");
+                Foods.create(Foods.FoodType.APPLE, "apple");
+                Foods.create(Foods.FoodType.GREAT_APPLE, "great apple");
+                Foods.create(Foods.FoodType.COKE, "coke");
                 Item.create("null", null);
-                initItem();
             } catch (Exception e) {
                 LOGGER.error("物品创建出现异常", e);
             } finally {

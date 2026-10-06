@@ -1,7 +1,6 @@
 package com.game.entity;
 
 import com.game.func.Crit;
-import com.game.item.Apple;
 import com.game.item.Foods;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +16,7 @@ public class Cow extends Eater{
     public void attack(Entity target, double attackCrit) {
         if(target.getHealth() > 0) {
             super.attack(target, attackCrit);
-            eat(new Apple("apple"),this);
+            selectFoodThenEat("apple");
         }
         else {
             target.die();

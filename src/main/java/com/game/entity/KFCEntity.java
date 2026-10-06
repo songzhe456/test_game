@@ -22,19 +22,7 @@ public class KFCEntity extends Eater{
         if (target.getHealth() > 0) {
             LOGGER.info("肯德基攻击！");
             super.attack(target, attackCrit);
-            for(Item item:GameRoll.getItems()) {
-                try {
-                    if (!(item instanceof Foods)) {
-                        continue;
-                    }
-                    if (Objects.equals(item.name, "coke")) {
-                        eat((Foods) item, this);
-                    }
-                } catch (Exception e) {
-                    LOGGER.warn("{}食用动作被取消，原因：",this.getId(),e);
-                    return;
-                }
-            }
+            selectFoodThenEat("coke");
         }
         else {
             LOGGER.warn("目标{}已死亡",target);

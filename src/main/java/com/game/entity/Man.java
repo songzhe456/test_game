@@ -21,7 +21,7 @@ public class Man extends Eater{
     public void attack(Entity target, double attackCrit) {
         if (target.getHealth() > 0) {
             super.attack(target, attackCrit);
-            eat(new GreatApple("great apple"),this);
+            selectFoodThenEat("great apple");
         }
         else {
             LOGGER.warn("目标{}已死亡",target);
