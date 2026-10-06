@@ -184,7 +184,8 @@ public class GameRoll implements Runnable {
                                     LOGGER.warn("目标不存在");
                                 }
                                 FIGHT.fight(attackerEntity, targetEntity);
-                                LOGGER.debug("目前实体列表为{}", GameRoll.getEntities());
+                                LOGGER.info("目前实体列表为{}", GameRoll.getEntities());
+                                LOGGER.info("目前物品列表为{}", GameRoll.getItems());
                                 if (ROLL_COUNT >= 999) {
                                     try {
                                         throw new RuntimeException("达到回合上限");

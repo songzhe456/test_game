@@ -16,7 +16,7 @@ public class Mouse extends Eater{
             setHealth(getHealth() - target.getCritValue());
             LOGGER.info("{}被{}欺负了", getId(), target.getId());
             try {
-                eat(null, target);
+                selectFoodThenEat(null);
             } catch (Exception e) {
                 LOGGER.info("{}的食物被抢走了,但他为空所以被抢失败",this);
             }

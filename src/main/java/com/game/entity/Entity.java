@@ -5,12 +5,15 @@ import com.game.entity.func.Move;
 import com.game.entity.poster.PacketPoster;
 import com.game.func.Attack;
 import com.game.func.ExceptionUtils;
+import com.game.item.Foods;
 import com.game.item.Item;
 import com.game.server.GameRoll;
 import com.game.util.RandomPool;
 import com.game.util.RandomUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
 
 public abstract class Entity implements Attack {
     private double health;
@@ -21,6 +24,9 @@ public abstract class Entity implements Attack {
     private static final Logger LOGGER = LoggerFactory.getLogger(Entity.class);
     private boolean isFirstSummon;
     private Move move;
+    private Item[] lootTable = new Item[]{
+            Item.create("apple", "apple")//Entity默认掉落表，仅苹果
+    };
 
     public Entity(int index,EntityType type,double health,String id){
         this.type = type;
@@ -29,13 +35,17 @@ public abstract class Entity implements Attack {
         if(type != EntityType.LOOT) {
             entitySummoned(health, id);
         } else {
-            Item lootInLoot = GameRoll.getItems().get(RandomUtil.getRandInt(0, GameRoll.getItems().size() - 1));
+            Item lootInLoot = getLoot();
             GameRoll.getItems().add(lootInLoot);
             lootEntitySummoned(health,id, lootInLoot);
         }
         ExceptionUtils.nullPointerExceptionTrigger(type);
         GameRoll.addEntity(index,this);
         setFirstSummon(true);
+    }
+
+    public Item getLoot() {
+        return lootTable[RandomUtil.getRandInt(0, lootTable.length)];
     }
 
     public double getCritValue() {
