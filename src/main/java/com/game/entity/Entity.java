@@ -4,6 +4,7 @@ import com.game.entity.func.Direction;
 import com.game.entity.func.Move;
 import com.game.entity.poster.PacketPoster;
 import com.game.func.Attack;
+import com.game.func.Crit;
 import com.game.func.ExceptionUtils;
 import com.game.item.Item;
 import com.game.server.GameRoll;
@@ -17,6 +18,8 @@ public abstract class Entity implements Attack {
     private String id;
     private final EntityType type;
     private boolean isDead;
+    private double damage;
+    private Crit crit = new Crit();
     private double critValue;
     private static final Logger LOGGER = LoggerFactory.getLogger(Entity.class);
     private boolean isFirstSummon;
@@ -25,7 +28,15 @@ public abstract class Entity implements Attack {
             Item.create("apple", "apple")//Entity默认掉落表，仅苹果
     };
 
-    public Entity(int index,EntityType type,double health,String id){
+    public Crit getCrit() {
+        return crit;
+    }
+
+    public double getDamage() {
+        return damage;
+    }
+
+    public Entity(int index, EntityType type, double health, String id){
         this.type = type;
         setId(id);
         setHealth(health);
@@ -46,7 +57,7 @@ public abstract class Entity implements Attack {
     }
 
     public double getCritValue() {
-        return critValue;
+        return crit.getCrit(damage,critValue);
     }
 
     public void setCritValue(double critValue) {
@@ -59,6 +70,10 @@ public abstract class Entity implements Attack {
 
     public void setFirstSummon(boolean firstSummon) {
         isFirstSummon = firstSummon;
+    }
+
+    public void setDamage(double damage) {
+        this.damage = damage;
     }
 
     public enum EntityType{

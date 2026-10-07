@@ -8,21 +8,16 @@ import org.slf4j.LoggerFactory;
 
 public class Man extends Eater{
     private static final Logger LOGGER = LoggerFactory.getLogger(Man.class);
-    private final double damage = 50;
-    private Crit crit = new Crit();
 
     public Man(double health, String id) {
         super(1,EntityType.MAN, health, id);
-    }
-
-    public double getDamage() {
-        return damage;
+        setDamage(50);
     }
 
     @Override
     public void attack(Entity target, double attackCrit) {
         if (target.getHealth() > 0) {
-            super.attack(target, crit.getCrit(getDamage(),attackCrit));
+            super.attack(target, getCrit().getCrit(getDamage(),attackCrit));
             selectFoodThenEat("great apple",this);
         }
         else {
