@@ -17,7 +17,7 @@ public class Man extends Eater{
     @Override
     public void attack(Entity target, double attackCrit) {
         if (target.getHealth() > 0) {
-            super.attack(target, getCrit().getCrit(getDamage(),attackCrit));
+            super.attack(target, getCritValue());
             selectFoodThenEat("great apple",this);
         }
         else {

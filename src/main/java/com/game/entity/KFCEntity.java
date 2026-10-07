@@ -16,7 +16,7 @@ public class KFCEntity extends Eater{
     public void attack(Entity target, double attackCrit) {
         if (target.getHealth() > 0) {
             LOGGER.info("肯德基攻击！");
-            super.attack(target, getCrit().getCrit(getDamage(),attackCrit));
+            super.attack(target, getCritValue());
             selectFoodThenEat("coke",this);
         }
         else {

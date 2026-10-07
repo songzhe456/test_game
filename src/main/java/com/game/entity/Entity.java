@@ -60,6 +60,10 @@ public abstract class Entity implements Attack {
         return crit.getCrit(damage,critValue);
     }
 
+    public double getLiteralCritValue() {
+        return critValue;
+    }
+
     public void setCritValue(double critValue) {
         this.critValue = critValue;
     }

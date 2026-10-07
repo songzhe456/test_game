@@ -10,7 +10,7 @@ public class Fight {
         if(attacker != null) {
             if(target != null) {
                 attacker.attack(target, attacker.getCritValue());
-                LOGGER.info("{}造成了暴击{}", attacker.getId(), attacker.getCritValue());
+                LOGGER.info("{}造成了额外暴击{}", attacker.getId(), attacker.getLiteralCritValue());
             }
             else {
                 LOGGER.warn("目标不存在");
