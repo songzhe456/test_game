@@ -43,7 +43,7 @@ public class Entities {
                 Entity.summon(Entity.EntityType.MAN, 150, "man");
                 Entity.summon(Entity.EntityType.NULL, 150, "bruce");
                 Entity.summon(Entity.EntityType.KFC, 200, "kfc entity");
-                Entity.summon(Entity.EntityType.MOUSE, 5, "mouse");
+                Entity.summon(Entity.EntityType.MOUSE, 25, "mouse");
                 Entity.summon(Entity.EntityType.DIVISION_ZERO,20,"jack");
                 Entity.summon(Entity.EntityType.CHINESE,100,"chinese");
                 try {

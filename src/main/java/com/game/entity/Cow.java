@@ -19,7 +19,6 @@ public class Cow extends Eater{
             selectFoodThenEat("apple",this);
         }
         else {
-            target.die();
             LOGGER.warn("目标{}已死亡",target);
         }
     }
