@@ -72,6 +72,14 @@ public class GameRoll implements Runnable {
                         LOGGER.info("回合线程内实体列表目前为{},大小为{}", ENTITY_LIST, ENTITY_LIST.size());
                         while (true) {
                             try {
+                                if (ROLL_COUNT >= 999) {
+                                    try {
+                                        throw new RuntimeException("达到回合上限");
+                                    } catch (Exception e) {
+                                        LOGGER.error(e.getMessage(), e);
+                                        System.exit(-1);
+                                    }
+                                }
                                 LOGGER.info("---第{}轮---", ROLL_COUNT);
                                 ROLL_COUNT += 1;
                                 if (man != null && man.getHealth() <= 0) {
@@ -195,14 +203,6 @@ public class GameRoll implements Runnable {
                                 LOGGER.info("目前实体列表为{}", GameRoll.getEntities());
                                 LOGGER.info("目前物品列表为{}", GameRoll.getItems());
                                 LOGGER.info("目前已死亡实体列表为{}",DIED_ENTITY_LIST);
-                                if (ROLL_COUNT >= 999) {
-                                    try {
-                                        throw new RuntimeException("达到回合上限");
-                                    } catch (Exception e) {
-                                        LOGGER.error(e.getMessage(), e);
-                                        System.exit(-1);
-                                    }
-                                }
                             } catch (Exception e) {
                                 LOGGER.error("循环出现异常，但仍坚挺！", e);
                             }
