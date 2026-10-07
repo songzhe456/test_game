@@ -9,7 +9,7 @@ public class Fight {
     public void fight(Entity attacker, Entity target) {
         if(attacker != null) {
             if(target != null) {
-                attacker.attack(target, target.getCritValue());
+                attacker.attack(target, attacker.getCritValue());
                 LOGGER.info("{}造成了暴击{}", attacker.getId(), attacker.getCritValue());
             }
             else {

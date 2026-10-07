@@ -130,8 +130,8 @@ public abstract class Entity implements Attack {
 
     public void attack(Entity target, double critValue) {
         if(target.getHealth() > 0) {
-            LOGGER.info("{}攻击了{}扣除了{}点血量", this.getId(), target.getId(),this.critValue);
-            target.setHealth(target.getHealth() - this.critValue);
+            LOGGER.info("{}攻击了{}扣除了{}点血量", this.getId(), target.getId(),critValue);
+            target.setHealth(target.getHealth() - critValue);
         }
         else {
             LOGGER.warn("目标{}已死亡",target);

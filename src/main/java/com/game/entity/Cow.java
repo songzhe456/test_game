@@ -11,11 +11,11 @@ public class Cow extends Eater{
     public Cow(double health, String id) {
         super(0,EntityType.COW,health, id);
     }
-    private final double attackCrit = new Crit().getCrit(damage,getCritValue());;
+    private final Crit crit = new Crit();
     @Override
     public void attack(Entity target, double attackCrit) {
         if(target.getHealth() > 0) {
-            super.attack(target, attackCrit);
+            super.attack(target, crit.getCrit(getDamage(),attackCrit));
             selectFoodThenEat("apple",this);
         }
         else {
@@ -25,10 +25,6 @@ public class Cow extends Eater{
 
     public double getDamage() {
         return damage;
-    }
-
-    public double getAttackCrit() {
-        return attackCrit;
     }
 
     @Override

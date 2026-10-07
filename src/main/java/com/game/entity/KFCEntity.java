@@ -2,17 +2,13 @@ package com.game.entity;
 
 import com.game.func.Crit;
 import com.game.item.Foods;
-import com.game.item.Item;
-import com.game.server.GameRoll;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Objects;
 
 public class KFCEntity extends Eater{
     private static final Logger LOGGER = LoggerFactory.getLogger(KFCEntity.class);
     private final double damage = 30;
-    private final double attackCrit = new Crit().getCrit(damage,getCritValue());
+    private Crit crit = new Crit();
     public KFCEntity(double health, String id) {
         super(3,EntityType.KFC,health, id);
     }
@@ -21,7 +17,7 @@ public class KFCEntity extends Eater{
     public void attack(Entity target, double attackCrit) {
         if (target.getHealth() > 0) {
             LOGGER.info("肯德基攻击！");
-            super.attack(target, attackCrit);
+            super.attack(target, crit.getCrit(getDamage(),attackCrit));
             selectFoodThenEat("coke",this);
         }
         else {
@@ -29,12 +25,12 @@ public class KFCEntity extends Eater{
         }
     }
 
-    public double getAttackCrit() {
-        return attackCrit;
-    }
-
     @Override
     public void eat(Foods food, Entity entity) {
         super.eat(food, entity);
+    }
+
+    public double getDamage() {
+        return damage;
     }
 }
