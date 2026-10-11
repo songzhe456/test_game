@@ -15,10 +15,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
-import static com.game.entity.Entities.*;
-
+@SuppressWarnings("unused")
 public class GameRoll implements Runnable {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(GameRoll.class);
     private static int ROLL_COUNT = 1;
     private static int reTries = 0;
@@ -71,7 +69,7 @@ public class GameRoll implements Runnable {
     }
 
     private void doFight(Entity attacker,Entity target){
-        if(attacker == null || target == null){LOGGER.warn("战斗实体不存在");}
+        if(attacker == null || target == null){LOGGER.warn("战斗实体不存在");return;}
         FIGHT.fight(attacker, target);
     }
 
