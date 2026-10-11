@@ -9,6 +9,7 @@ LOG_PATH_IS_UNDEFINED
 src/main/java/com/test/
 .idea
 dependency-reduced-pom.xml
+mvn_test_*
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
