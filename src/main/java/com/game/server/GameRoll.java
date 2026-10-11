@@ -72,7 +72,6 @@ public class GameRoll implements Runnable {
 
     private void doFight(Entity attacker,Entity target){
         if(attacker == null || target == null){LOGGER.warn("战斗实体不存在");}
-
         FIGHT.fight(attacker, target);
     }
 
