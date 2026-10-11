@@ -38,6 +38,7 @@ public abstract class Entity implements Attack {
     }
 
     public Entity(int index, EntityType type, double health, String id) {
+        setFirstSummon(true);
         this.type = type;
         setId(id);
         setHealth(health);
@@ -50,7 +51,6 @@ public abstract class Entity implements Attack {
         }
         ExceptionUtils.nullPointerExceptionTrigger(type);
         GameRoll.addEntity(index, this);
-        setFirstSummon(true);
     }
 
     public Item getLoot() {
@@ -105,14 +105,14 @@ public abstract class Entity implements Attack {
 
     public void setHealth(double health) {
         double originHealth = this.health;
-        this.health = Math.max(0, health);
+        this.health = health <= 0 ? 0 : health;
         if (!isFirstSummon() && move != null) {
-            LOGGER.info("{}的血量由{}变为{}，位置是{}", id, originHealth, health, this.move);
+            LOGGER.info("{}的血量由{}变为{}，位置是{}", id, originHealth, this.health, this.move);
         } else if (originHealth == 0 && isFirstSummon()) {
-            LOGGER.info("{}刚被生成，血量已由{}变为{}", id, originHealth, health);
+            LOGGER.info("{}刚被生成，血量已由{}变为{}", id, originHealth, this.health);
             setFirstSummon(false);
         } else if (!isFirstSummon()) {
-            LOGGER.info("{}的血量由{}变为{}", id, originHealth, health);
+            LOGGER.info("{}的血量由{}变为{}", id, originHealth, this.health);
         }
     }
 
