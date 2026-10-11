@@ -25,7 +25,7 @@ public abstract class Eater extends Entity implements CanEatFood {
                     eat((Foods) item, entity);
                 }
             } catch (Exception e) {
-                LOGGER.warn("{}食用动作被取消，原因：", entity.getId(), e);
+                LOGGER.warn("食用动作被取消，原因：", e);
                 return;
             }
         }
