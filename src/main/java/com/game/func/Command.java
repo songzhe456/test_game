@@ -50,6 +50,10 @@ public class Command {
     public Entity chooseEntity() {
         Scanner chooser = Config.INPUT_SCANNER;
         String entity = chooser.nextLine();
+        if ("exit".equals(entity)) {
+            System.out.println("进程已退出");
+            System.exit(0);
+        }
         Entity chosen = null;
         try {
             for (Entity e : GameRoll.getEntities()) {
