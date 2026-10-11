@@ -14,15 +14,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @SuppressWarnings("unused")
 public class GameRoll implements Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(GameRoll.class);
     private static int ROLL_COUNT = 1;
     private static int reTries = 0;
-    private static final ArrayList<Entity> DIED_ENTITY_LIST = new ArrayList<>();
-    private static final ArrayList<Entity> ENTITY_LIST = new ArrayList<>();
-    private static final ArrayList<Item> ITEM_LIST = new ArrayList<>();
+    private static final CopyOnWriteArrayList<Entity> DIED_ENTITY_LIST = new CopyOnWriteArrayList<>();
+    private static final CopyOnWriteArrayList<Entity> ENTITY_LIST = new CopyOnWriteArrayList<>();
+    private static final CopyOnWriteArrayList<Item> ITEM_LIST = new CopyOnWriteArrayList<>();
     private static final Fight FIGHT = new Fight();
     private static final Command COMMAND = new Command();
 
@@ -185,11 +186,11 @@ public class GameRoll implements Runnable {
         }
     }
 
-    public static ArrayList<Entity> getEntities() {
+    public static CopyOnWriteArrayList<Entity> getEntities() {
         return ENTITY_LIST;
     }
 
-    public static ArrayList<Item> getItems() {
+    public static CopyOnWriteArrayList<Item> getItems() {
         return ITEM_LIST;
     }
 
