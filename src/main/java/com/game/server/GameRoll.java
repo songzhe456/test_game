@@ -59,6 +59,10 @@ public class GameRoll implements Runnable {
         }
     }
 
+    /**
+     *遍历实体列表检测是否死亡，
+     * 如果是则添加进DIED_ENTITY_LIST列表中
+     */
     private void detectDeath(){
         for(Entity entity : ENTITY_LIST){
             if(entity != null && entity.getHealth() <= 0){
@@ -68,6 +72,12 @@ public class GameRoll implements Runnable {
         }
     }
 
+    /**
+     * 传入两个参数并调用FIGHT.fight(Entity attacker,Entity target)，
+     * 让他们进行战斗
+     * @param attacker 攻击者
+     * @param target 攻击目标
+     */
     private void doFight(Entity attacker,Entity target){
         if(attacker == null || target == null){LOGGER.warn("战斗实体不存在");return;}
         FIGHT.fight(attacker, target);
