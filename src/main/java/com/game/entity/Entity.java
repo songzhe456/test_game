@@ -13,18 +13,19 @@ import com.game.util.RandomUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressWarnings("unused")
 public abstract class Entity implements Attack {
     private double health;
     private String id;
     private final EntityType type;
     private boolean isDead;
     private double damage;
-    private Crit crit = new Crit();
+    private final Crit crit = new Crit();
     private double critValue;
     private static final Logger LOGGER = LoggerFactory.getLogger(Entity.class);
     private boolean isFirstSummon;
     private Move move;
-    private Item[] lootTable = new Item[]{
+    private final Item[] lootTable = new Item[]{
             Item.create("apple", "apple")//Entity默认掉落表，仅苹果
     };
 
@@ -36,19 +37,19 @@ public abstract class Entity implements Attack {
         return damage;
     }
 
-    public Entity(int index, EntityType type, double health, String id){
+    public Entity(int index, EntityType type, double health, String id) {
         this.type = type;
         setId(id);
         setHealth(health);
-        if(type != EntityType.LOOT) {
+        if (type != EntityType.LOOT) {
             entitySummoned(health, id);
         } else {
             Item lootInLoot = getLoot();
             GameRoll.getItems().add(lootInLoot);
-            lootEntitySummoned(health,id, lootInLoot);
+            lootEntitySummoned(health, id, lootInLoot);
         }
         ExceptionUtils.nullPointerExceptionTrigger(type);
-        GameRoll.addEntity(index,this);
+        GameRoll.addEntity(index, this);
         setFirstSummon(true);
     }
 
@@ -57,7 +58,7 @@ public abstract class Entity implements Attack {
     }
 
     public double getCritValue() {
-        return crit.getCrit(damage,critValue);
+        return crit.getCrit(damage, critValue);
     }
 
     public double getLiteralCritValue() {
@@ -80,7 +81,7 @@ public abstract class Entity implements Attack {
         this.damage = damage;
     }
 
-    public enum EntityType{
+    public enum EntityType {
         NULL,
         DEFAULT,
         COW,
@@ -95,20 +96,19 @@ public abstract class Entity implements Attack {
     }
 
     public double getHealth() {
-        return Math.max(0.0,health);
+        return Math.max(0.0, health);
     }
 
-    public  String getId() {
+    public String getId() {
         return id;
     }
 
     public void setHealth(double health) {
         double originHealth = this.health;
-        this.health = Math.max(0,health);
+        this.health = Math.max(0, health);
         if (!isFirstSummon() && move != null) {
-            LOGGER.info("{}的血量由{}变为{}，位置是{}", id, originHealth, health,this.move);
-        }
-        else if(originHealth == 0 && isFirstSummon){
+            LOGGER.info("{}的血量由{}变为{}，位置是{}", id, originHealth, health, this.move);
+        } else if (originHealth == 0 && isFirstSummon()) {
             LOGGER.info("{}刚被生成，血量已由{}变为{}", id, originHealth, health);
             setFirstSummon(false);
         } else if (!isFirstSummon()) {
@@ -120,15 +120,15 @@ public abstract class Entity implements Attack {
         this.id = id;
     }
 
-    public static void entitySummoned(double health,String id){
+    public static void entitySummoned(double health, String id) {
         LOGGER.info("生成了{}:[\n    hp:{}\n]", id, health);
     }
 
-    public void lootEntitySummoned(double health, String id, Item item){
+    public void lootEntitySummoned(double health, String id, Item item) {
         LOGGER.info("生成了{}:[\n    hp:{}\n    loots:{}\n]", id, health, item);
     }
 
-    public void die(){
+    public void die() {
         Runnable entityDieRunnable = () -> {
             LOGGER.info("{}死了", id);
             this.health = 0;
@@ -136,7 +136,7 @@ public abstract class Entity implements Attack {
             Runnable lootSpawnRunnable = () -> {
                 GameRoll.getEntities().remove(this);
                 summon(EntityType.LOOT, 5.0, id + "'s loot");
-                LOGGER.debug("有实体死亡，当前实体列表为{}",GameRoll.getEntities());
+                LOGGER.debug("有实体死亡，当前实体列表为{}", GameRoll.getEntities());
             };
             Thread lootSpawnThread = new Thread(lootSpawnRunnable);
             lootSpawnThread.setName("Loot Spawn Thread");
@@ -148,12 +148,11 @@ public abstract class Entity implements Attack {
     }
 
     public void attack(Entity target, double critValue) {
-        if(target.getHealth() > 0) {
-            LOGGER.info("{}攻击了{}扣除了{}点血量", this.getId(), target.getId(),critValue);
+        if (target.getHealth() > 0) {
+            LOGGER.info("{}攻击了{}扣除了{}点血量", this.getId(), target.getId(), critValue);
             target.setHealth(target.getHealth() - critValue);
-        }
-        else {
-            LOGGER.warn("目标{}已死亡",target);
+        } else {
+            LOGGER.warn("目标{}已死亡", target);
         }
     }
 
@@ -168,18 +167,18 @@ public abstract class Entity implements Attack {
                 case MOUSE -> new Mouse(health, id);
                 case RANDOM_ENTITY -> new RandomPool.RandomEntity(health, id);
                 case DIVISION_ZERO -> new DivisionZeroEntity(health, id);
-                case CHINESE -> new Chinese(health,id);
+                case CHINESE -> new Chinese(health, id);
                 case POSTER -> new PacketPoster(health, id);
                 default -> new Cow(health, "实体生成出错");
             };
         } catch (Exception e) {
-            LOGGER.error("{}生成失败",id,e);
+            LOGGER.error("{}生成失败", id, e);
             return null;
         }
     }
 
-    public void move(Direction.Directions directions,String id){
-        move = new Move(directions,id);
+    public void move(Direction.Directions directions, String id) {
+        move = new Move(directions, id);
     }
 
     @Override
@@ -191,15 +190,15 @@ public abstract class Entity implements Attack {
         return type;
     }
 
-    public void tick(){
+    public void tick() {
         boolean needTick = true;
-        while (!this.isDead && needTick){
+        while (!this.isDead && needTick) {
             try {
                 attack(GameRoll.getEntities().get(RandomUtil.getRandInt(0, GameRoll.getEntities().size() - 1)), this.getCritValue());
                 LOGGER.info("{}完成了一次初始行动", id);
                 needTick = false;
             } catch (Exception e) {
-                LOGGER.error("实体tick异常");
+                LOGGER.error("实体tick异常", e);
                 break;
             }
         }

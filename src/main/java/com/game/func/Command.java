@@ -24,26 +24,26 @@ public class Command {
                     GameRoll.entityMove(entity, Direction.Directions.FORWARD, id, FOOT);
                     break;
                 case ("backward"):
-                    GameRoll.entityMove(entity, Direction.Directions.BACKWARD, id,FOOT);
+                    GameRoll.entityMove(entity, Direction.Directions.BACKWARD, id, FOOT);
                     break;
                 case ("left"):
-                    GameRoll.entityMove(entity, Direction.Directions.LEFT, id,FOOT);
+                    GameRoll.entityMove(entity, Direction.Directions.LEFT, id, FOOT);
                     break;
                 case ("right"):
-                    GameRoll.entityMove(entity, Direction.Directions.RIGHT, id,FOOT);
+                    GameRoll.entityMove(entity, Direction.Directions.RIGHT, id, FOOT);
                     break;
                 case ("up"):
-                    GameRoll.entityMove(entity, Direction.Directions.UP, id,FOOT);
+                    GameRoll.entityMove(entity, Direction.Directions.UP, id, FOOT);
                     break;
                 case ("down"):
-                    GameRoll.entityMove(entity, Direction.Directions.DOWN, id,FOOT);
+                    GameRoll.entityMove(entity, Direction.Directions.DOWN, id, FOOT);
                     break;
                 case null, default:
-                    GameRoll.entityMove(entity, null, id,null);
+                    GameRoll.entityMove(entity, null, id, null);
                     break;
             }
         } catch (Exception e) {
-            LOGGER.warn("位置不合法");
+            LOGGER.warn("位置不合法", e);
         }
     }
 
@@ -52,7 +52,7 @@ public class Command {
         String entity = chooser.nextLine();
         Entity chosen = null;
         try {
-            for (Entity e:GameRoll.getEntities()) {
+            for (Entity e : GameRoll.getEntities()) {
                 if (entity.equals(e.getId())) {
                     chosen = e;
                 }

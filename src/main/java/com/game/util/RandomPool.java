@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class RandomPool {
-    //常数定义区
+    //常量定义区
     private static final int LOWEST = 0;
     private static final int MAXIMUM = 4;
     private static final int LOWEST_HP = 0;
@@ -16,34 +16,35 @@ public class RandomPool {
     private static final String MAN_ENTITY_ID = "man";
 
     private static final Logger logger = LoggerFactory.getLogger(RandomPool.class);
-    private static final int RANDOM_NUM = RandomUtil.getRandInt(LOWEST,MAXIMUM);
-    public static class RandomEntity extends Entity{
+    private static final int RANDOM_NUM = RandomUtil.getRandInt(LOWEST, MAXIMUM);
+
+    public static class RandomEntity extends Entity {
         public RandomEntity(double health, String id) {
-            super(7,Entity.EntityType.values()[RANDOM_NUM], health, id);
+            super(7, Entity.EntityType.values()[RANDOM_NUM], health, id);
         }
 
         //此方法会返回随机实体类型
-        public  static EntityType getRandType(){
+        public static EntityType getRandType() {
             return EntityType.values()[RANDOM_NUM];
         }
 
         @Override
         public void attack(Entity target, double health) {
-            double attackCrit = new Crit().getCrit(getCritValue(),getCritValue());
+            double attackCrit = new Crit().getCrit(getCritValue(), getCritValue());
             target.setHealth(target.getHealth() - attackCrit);
             logger.info("{}攻击了{}造成了{}点血量", getId(), target.getId(), Math.round(attackCrit * 10) / 10.0);
         }
     }
 
     @Deprecated
-    public static void generateRandomEntity(){
-        switch (RANDOM_NUM){
-            case (0):{
+    public static void generateRandomEntity() {
+        switch (RANDOM_NUM) {
+            case (0): {
                 new RandomEntity(RandomUtil.getRandDouble(LOWEST_HP, 30), NULL_ENTITY_ID);
                 break;
             }
-            case (1):{
-                new RandomEntity(RandomUtil.getRandDouble(LOWEST_HP, 30),DEFAULT_ENTITY_ID);
+            case (1): {
+                new RandomEntity(RandomUtil.getRandDouble(LOWEST_HP, 30), DEFAULT_ENTITY_ID);
                 break;
             }
             case (2): {

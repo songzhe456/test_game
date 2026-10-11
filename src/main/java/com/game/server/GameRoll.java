@@ -30,8 +30,8 @@ public class GameRoll implements Runnable {
         try {
             ENTITY_LIST.add(index, entity);
         } catch (Exception e) {
-            LOGGER.error("实体列表扩充失败：",e);
-            ENTITY_LIST.add(index,null);
+            LOGGER.error("实体列表扩充失败：", e);
+            ENTITY_LIST.add(index, null);
         }
     }
 
@@ -60,12 +60,12 @@ public class GameRoll implements Runnable {
     }
 
     /**
-     *遍历实体列表检测是否死亡，
+     * 遍历实体列表检测是否死亡，
      * 如果是则添加进DIED_ENTITY_LIST列表中
      */
-    private void detectDeath(){
-        for(Entity entity : ENTITY_LIST){
-            if(entity != null && entity.getHealth() <= 0){
+    private void detectDeath() {
+        for (Entity entity : ENTITY_LIST) {
+            if (entity != null && entity.getHealth() <= 0) {
                 entity.die();
                 DIED_ENTITY_LIST.add(entity);
             }
@@ -75,11 +75,15 @@ public class GameRoll implements Runnable {
     /**
      * 传入两个参数并调用FIGHT.fight(Entity attacker,Entity target)，
      * 让他们进行战斗
+     *
      * @param attacker 攻击者
-     * @param target 攻击目标
+     * @param target   攻击目标
      */
-    private void doFight(Entity attacker,Entity target){
-        if(attacker == null || target == null){LOGGER.warn("战斗实体不存在");return;}
+    private void doFight(Entity attacker, Entity target) {
+        if (attacker == null || target == null) {
+            LOGGER.warn("战斗实体不存在");
+            return;
+        }
         FIGHT.fight(attacker, target);
     }
 
@@ -110,7 +114,7 @@ public class GameRoll implements Runnable {
                                     Entity chosen = COMMAND.chooseEntity();
                                     COMMAND.scanMove(chosen, chosen.getId());
                                 } catch (Exception e) {
-                                    LOGGER.warn("实体不存在");
+                                    LOGGER.warn("实体不存在", e);
                                 }
                                 System.out.println("请输入攻击者(输入exit退出)");
                                 Entity attacker = COMMAND.chooseEntity();
@@ -118,12 +122,12 @@ public class GameRoll implements Runnable {
                                 System.out.println("请输入攻击目标(输入exit退出)");
                                 Entity target = COMMAND.chooseEntity();
 
-                                doFight(attacker,target);
+                                doFight(attacker, target);
                                 LOGGER.info("目前实体列表为{}", GameRoll.getEntities());
                                 LOGGER.info("目前物品列表为{}", GameRoll.getItems());
-                                LOGGER.info("目前已死亡实体列表为{}",DIED_ENTITY_LIST);
+                                LOGGER.info("目前已死亡实体列表为{}", DIED_ENTITY_LIST);
                             } catch (Exception e) {
-                                LOGGER.error("循环出现异常，但仍坚挺！", e);
+                                LOGGER.error("循环出现异常", e);
                             }
                         }
                     };
@@ -191,6 +195,6 @@ public class GameRoll implements Runnable {
 
     public static void entityMove(Entity entity, Direction.Directions directions, String id, BodyPart part) {
         entity.move(directions, id);
-        LOGGER.info("{}的{}往{}移动了", id, part,directions);
+        LOGGER.info("{}的{}往{}移动了", id, part, directions);
     }
 }

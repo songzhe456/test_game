@@ -1,8 +1,6 @@
 package com.game.entity;
 
-import com.game.func.Crit;
 import com.game.item.Foods;
-import com.game.item.GreatApple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

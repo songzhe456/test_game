@@ -13,12 +13,13 @@ import org.slf4j.LoggerFactory;
 
 import java.net.InetSocketAddress;
 
+@SuppressWarnings(value = {"deprecation","unused"})
 public class Server {
     private static ChannelFuture channelFuture;
     private final int port;
     private static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
 
-    public Server(int port){
+    public Server(int port) {
         this.port = port;
     }
 
@@ -30,22 +31,21 @@ public class Server {
             serverBootstrap.group(group)
                     .channel(NioServerSocketChannel.class)
                     .localAddress(new InetSocketAddress(port))
-                    .childHandler(new ChannelInitializer<SocketChannel>(){
+                    .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
-                        protected void initChannel(SocketChannel ch) throws Exception {
+                        protected void initChannel(SocketChannel ch) {
                             ch.pipeline().addLast(new StringEncoder())
                                     .addLast(new ServerHandler());
                         }
                     });
 
             channelFuture = serverBootstrap.bind().sync();
-            LOGGER.info("正在监听{}",channelFuture.channel().localAddress());
+            LOGGER.info("正在监听{}", channelFuture.channel().localAddress());
 
             channelFuture.channel().closeFuture().sync();
         } catch (Exception e) {
             LOGGER.error("服务器出现异常：", e);
-        }
-        finally {
+        } finally {
             group.shutdownGracefully().sync();
         }
     }
@@ -54,7 +54,7 @@ public class Server {
         return channelFuture;
     }
 
-    public static class ServerHandler extends ChannelInboundHandlerAdapter{
+    public static class ServerHandler extends ChannelInboundHandlerAdapter {
         private static String msg;
         private static String content;
         private static final Logger LOGGER = LoggerFactory.getLogger(ServerHandler.class);
@@ -67,7 +67,7 @@ public class Server {
             ByteBuf in = (ByteBuf) msg;
             content = in.toString(CharsetUtil.UTF_8);
             in.release();
-            LOGGER.info("已接收客户端传来的{}",content);
+            LOGGER.info("已接收客户端传来的{}", content);
             new GameRoll().run();
 
             ctx.writeAndFlush("服务器已接收" + content);
@@ -82,10 +82,11 @@ public class Server {
         }
 
         @Override
-        public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-            LOGGER.error("服务器处理出现异常",cause);
+        public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+            LOGGER.error("服务器处理出现异常", cause);
             ctx.close();
         }
+
         public static void setMsg(String msg) {
             ServerHandler.msg = msg;
         }

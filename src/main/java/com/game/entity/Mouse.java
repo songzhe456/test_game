@@ -18,7 +18,7 @@ public class Mouse extends Eater{
             try {
                 selectFoodThenEat("great apple",target);//老鼠爱吃的大苹果会被抢走
             } catch (Exception e) {
-                LOGGER.info("{}的食物被抢走了,但他为空所以被抢失败",this);
+                LOGGER.info("{}的食物被抢走了,但他为空所以被抢失败：",this,e);
             }
         } else if (target == this) {
             LOGGER.warn("老鼠不敢打自己");
