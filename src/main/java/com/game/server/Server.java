@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.InetSocketAddress;
 
-@SuppressWarnings(value = {"deprecation","unused"})
+@SuppressWarnings(value = {"deprecation", "unused"})
 public class Server {
     private static ChannelFuture channelFuture;
     private final int port;

@@ -7,11 +7,13 @@ import java.util.Objects;
 
 public abstract class Item {
     public final String name;
-    public Item(ItemType type,String name)  {
+
+    public Item(ItemType type, String name) {
         this.name = name;
         ExceptionUtils.nullPointerExceptionTrigger(type);
     }
-    public enum ItemType{
+
+    public enum ItemType {
         FOODS,
         NULL
     }
@@ -21,19 +23,17 @@ public abstract class Item {
         return name;
     }
 
-    public static Item create(String type, String name){
-        if (Objects.equals(type,"apple")){
+    public static Item create(String type, String name) {
+        if (Objects.equals(type, "apple")) {
             return new Apple(name);
-        }
-        else if (Objects.equals(type,"null")) {
+        } else if (Objects.equals(type, "null")) {
             return new NullItem(name);
-        }
-        else {
+        } else {
             return null;
         }
     }
 
-    public static void remove(Item item){
+    public static void remove(Item item) {
         GameRoll.getItems().remove(item);
     }
 }

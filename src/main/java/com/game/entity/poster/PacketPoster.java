@@ -2,12 +2,8 @@ package com.game.entity.poster;
 
 import com.game.entity.Entity;
 import com.game.server.Server;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class PacketPoster extends Entity implements Postable{
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(PacketPoster.class);
+public class PacketPoster extends Entity implements Postable {
 
     public PacketPoster(double health, String id) {
         super(8, EntityType.POSTER, health, id);

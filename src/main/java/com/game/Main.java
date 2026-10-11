@@ -32,7 +32,7 @@ public class Main {
                 };
                 Runnable clientRunnable = () -> {
                     try {
-                        new Client("127.0.0.1",8888).run();
+                        new Client("127.0.0.1", 8888).run();
                     } catch (Exception e) {
                         LOGGER.error("客户端线程出现异常", e);
                     }

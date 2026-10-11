@@ -3,14 +3,15 @@ package com.game.entity.func;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressWarnings("unused")
 public class Move {
     private static final Logger LOGGER = LoggerFactory.getLogger(Move.class);
     private float x;
     private float y;
     private float z;
 
-    public Move(Direction.Directions directions,String id){
-        switch (directions){
+    public Move(Direction.Directions directions, String id) {
+        switch (directions) {
             case DOWN:
                 y -= 1;
                 break;
@@ -32,7 +33,7 @@ public class Move {
             case NONE:
                 break;
             default:
-                LOGGER.warn("{}未移动",id);
+                LOGGER.warn("{}未移动", id);
         }
     }
 
@@ -49,7 +50,7 @@ public class Move {
     }
 
     @Override
-    public String toString(){
-        return "["+x+","+y+","+z+"]";
+    public String toString() {
+        return "[" + x + "," + y + "," + z + "]";
     }
 }

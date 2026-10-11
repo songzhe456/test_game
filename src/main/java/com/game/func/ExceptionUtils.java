@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 public class ExceptionUtils {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionUtils.class);
+
     public static void nullPointerExceptionTrigger(Entity.EntityType type) {
         if (type.equals(Entity.EntityType.NULL)) {
             try {
@@ -16,7 +17,8 @@ public class ExceptionUtils {
             }
         }
     }
-    public static void nullPointerExceptionTrigger(Item.ItemType type)  {
+
+    public static void nullPointerExceptionTrigger(Item.ItemType type) {
         if (type.equals(Item.ItemType.NULL)) {
             try {
                 throw new NullPointerException("物品类型为" + Item.ItemType.NULL);

@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 public class Main {
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
-    static void main(String[] args) {
+    public static void main(String[] args) {
         Runnable runnable = () -> {
             try {
                 LOGGER.info("客户端程序开始运行");
@@ -17,7 +17,7 @@ public class Main {
                 }
                 Runnable clientRunnable = () -> {
                     try {
-                        new Client("127.0.0.1",8888).run();
+                        new Client("127.0.0.1", 8888).run();
                     } catch (Exception e) {
                         LOGGER.error("客户端线程出现异常", e);
                     }

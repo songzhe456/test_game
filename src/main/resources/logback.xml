@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration>
-    <property name="LOG_PATH" value="./logs" />
+    <property name="LOG_PATH" value="./logs"/>
     <appender name="ROLL_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_PATH}/latest.log</file>
         <encoder>

@@ -3,10 +3,11 @@ package com.game.entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class NullEntity extends Entity{
+public class NullEntity extends Entity {
     private static final Logger LOGGER = LoggerFactory.getLogger(NullEntity.class);
+
     public NullEntity(double health, String id) {
-        super(2,EntityType.NULL,health, id);
+        super(2, EntityType.NULL, health, id);
     }
 
     @Override
@@ -16,9 +17,8 @@ public class NullEntity extends Entity{
             String nullEntityType = "被篡改";
             target.setId(nullEntityType);
             LOGGER.info("{}把{}的名字{}篡改为{}", getId(), originId, originId, target.getId());
-        }
-        else {
-            LOGGER.warn("目标{}已死亡",target);
+        } else {
+            LOGGER.warn("目标{}已死亡", target);
         }
     }
 }

@@ -5,6 +5,7 @@ import com.game.util.RandomPool;
 import com.game.util.RandomUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import static com.game.server.GameRoll.getEntities;
 
 public class Entities {
@@ -18,7 +19,8 @@ public class Entities {
     public static Entity divisionZeroEntity;
     public static Entity chinese;
     public static Entity poster;
-    public static void initEntity()  {
+
+    public static void initEntity() {
         cow = getEntities().get(0);
         man = getEntities().get(1);
         nullEntity = getEntities().get(2);
@@ -28,7 +30,7 @@ public class Entities {
         chinese = getEntities().get(6);
         randomEntity = getEntities().get(7);
         poster = getEntities().get(8);
-        for(Entity entity:GameRoll.getEntities()){
+        for (Entity entity : GameRoll.getEntities()) {
             entity.setCritValue(10);
             entity.tick();
         }
@@ -36,7 +38,7 @@ public class Entities {
         LOGGER.debug("实体列表目前为{},大小为{}", getEntities(), getEntities().size());
     }
 
-    public void summon(){
+    public void summon() {
         try {
             try {
                 Entity.summon(Entity.EntityType.COW, 115, "cow");
@@ -44,14 +46,14 @@ public class Entities {
                 Entity.summon(Entity.EntityType.NULL, 150, "bruce");
                 Entity.summon(Entity.EntityType.KFC, 200, "kfc entity");
                 Entity.summon(Entity.EntityType.MOUSE, 25, "mouse");
-                Entity.summon(Entity.EntityType.DIVISION_ZERO,20,"jack");
-                Entity.summon(Entity.EntityType.CHINESE,100,"chinese");
+                Entity.summon(Entity.EntityType.DIVISION_ZERO, 20, "jack");
+                Entity.summon(Entity.EntityType.CHINESE, 100, "chinese");
                 try {
                     Entity.summon(Entity.EntityType.RANDOM_ENTITY, RandomUtil.getRandDouble(0, 1000), "[随机实体]" + RandomPool.RandomEntity.getRandType().toString());
                 } catch (Exception e) {
                     LOGGER.error("生成随机实体时出现如下异常：", e);
                 }
-                Entity.summon(Entity.EntityType.POSTER,50,"poster");
+                Entity.summon(Entity.EntityType.POSTER, 50, "poster");
             } catch (Exception e) {
                 LOGGER.error("生成实体时出现异常", e);
             }

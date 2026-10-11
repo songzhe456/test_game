@@ -4,27 +4,29 @@ import com.game.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Foods extends Item{
+public class Foods extends Item {
     private static final Logger LOGGER = LoggerFactory.getLogger(Foods.class);
     private final double healthResume;
+
     public Foods(String name, double healthResume) {
         super(ItemType.FOODS, name);
         this.healthResume = healthResume;
 
     }
-    public void eat(Entity entity){
+
+    public void eat(Entity entity) {
         entity.setHealth(entity.getHealth() + healthResume);
-        LOGGER.info("{}吃了{}回了{}血量",entity.getId(),this.name,healthResume);
+        LOGGER.info("{}吃了{}回了{}血量", entity.getId(), this.name, healthResume);
     }
 
-    public enum FoodType{
+    public enum FoodType {
         APPLE,
         GREAT_APPLE,
         COKE
     }
 
     public static Foods create(FoodType type, String name) {
-        switch (type){
+        switch (type) {
             case APPLE -> {
                 return new Apple(name);
             }
