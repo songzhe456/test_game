@@ -61,6 +61,21 @@ public class GameRoll implements Runnable {
         }
     }
 
+    private void detectDeath(){
+        for(Entity entity : ENTITY_LIST){
+            if(entity != null && entity.getHealth() <= 0){
+                entity.die();
+                DIED_ENTITY_LIST.add(entity);
+            }
+        }
+    }
+
+    private void doFight(Entity attacker,Entity target){
+        if(attacker == null || target == null){LOGGER.warn("战斗实体不存在");}
+
+        FIGHT.fight(attacker, target);
+    }
+
     public void fight() {
         Thread createItemThread = getCreateItemThread();
         createItemThread.start();
@@ -82,39 +97,7 @@ public class GameRoll implements Runnable {
                                 }
                                 LOGGER.info("---第{}轮---", ROLL_COUNT);
                                 ROLL_COUNT += 1;
-                                if (man != null && man.getHealth() <= 0) {
-                                    man.die();
-                                    DIED_ENTITY_LIST.add(man);
-                                    man = null;
-                                } else if (cow != null && cow.getHealth() <= 0) {
-                                    cow.die();
-                                    DIED_ENTITY_LIST.add(cow);
-                                    cow = null;
-                                } else if (nullEntity != null && nullEntity.getHealth() <= 0) {
-                                    nullEntity.die();
-                                    DIED_ENTITY_LIST.add(nullEntity);
-                                    nullEntity = null;
-                                } else if (kfcEntity != null && kfcEntity.getHealth() <= 0) {
-                                    kfcEntity.die();
-                                    DIED_ENTITY_LIST.add(kfcEntity);
-                                    kfcEntity = null;
-                                } else if (mouse != null && mouse.getHealth() <= 0) {
-                                    mouse.die();
-                                    DIED_ENTITY_LIST.add(mouse);
-                                    mouse = null;
-                                } else if (divisionZeroEntity != null && divisionZeroEntity.getHealth() <= 0) {
-                                    divisionZeroEntity.die();
-                                    DIED_ENTITY_LIST.add(divisionZeroEntity);
-                                    divisionZeroEntity = null;
-                                } else if (chinese != null && chinese.getHealth() <= 0) {
-                                    chinese.die();
-                                    DIED_ENTITY_LIST.add(chinese);
-                                    chinese = null;
-                                } else if (randomEntity != null && randomEntity.getHealth() <= 0) {
-                                    randomEntity.die();
-                                    DIED_ENTITY_LIST.add(randomEntity);
-                                    randomEntity = null;
-                                }
+                                detectDeath();
                                 System.out.println("请选择要移动的实体");
                                 try {
                                     Entity chosen = COMMAND.chooseEntity();
@@ -124,82 +107,11 @@ public class GameRoll implements Runnable {
                                 }
                                 System.out.println("请输入攻击者(输入exit退出)");
                                 Entity attacker = COMMAND.chooseEntity();
-                                Entity attackerEntity = null;
-                                if (attacker != null)
-                                    switch (attacker.getType()) {
-                                        case COW:
-                                            attackerEntity = cow;
-                                            break;
-                                        case KFC:
-                                            attackerEntity = kfcEntity;
-                                            break;
-                                        case MAN:
-                                            attackerEntity = man;
-                                            break;
-                                        case MOUSE:
-                                            attackerEntity = mouse;
-                                            break;
-                                        case NULL:
-                                            attackerEntity = nullEntity;
-                                            break;
-                                        case RANDOM_ENTITY:
-                                            attackerEntity = randomEntity;
-                                            break;
-                                        case DIVISION_ZERO:
-                                            attackerEntity = divisionZeroEntity;
-                                            break;
-                                        case CHINESE:
-                                            attackerEntity = chinese;
-                                            break;
-                                        case POSTER:
-                                            attackerEntity = poster;
-                                            break;
-                                        default:
-                                            LOGGER.warn("{}不存在", attacker);
-                                    }
-                                else {
-                                    LOGGER.warn("攻击者不存在");
-                                }
+
                                 System.out.println("请输入攻击目标(输入exit退出)");
                                 Entity target = COMMAND.chooseEntity();
-                                Entity targetEntity = null;
-                                if(target != null) {
-                                    switch (target.getType()) {
-                                        case COW:
-                                            targetEntity = cow;
-                                            break;
-                                        case KFC:
-                                            targetEntity = kfcEntity;
-                                            break;
-                                        case MAN:
-                                            targetEntity = man;
-                                            break;
-                                        case MOUSE:
-                                            targetEntity = mouse;
-                                            break;
-                                        case NULL:
-                                            targetEntity = nullEntity;
-                                            break;
-                                        case RANDOM_ENTITY:
-                                            targetEntity = randomEntity;
-                                            break;
-                                        case DIVISION_ZERO:
-                                            targetEntity = divisionZeroEntity;
-                                            break;
-                                        case CHINESE:
-                                            targetEntity = chinese;
-                                            break;
-                                        case POSTER:
-                                            targetEntity = poster;
-                                            break;
-                                        default:
-                                            LOGGER.warn("{}不存在", target);
-                                    }
-                                }
-                                else {
-                                    LOGGER.warn("目标不存在");
-                                }
-                                FIGHT.fight(attackerEntity, targetEntity);
+
+                                doFight(attacker,target);
                                 LOGGER.info("目前实体列表为{}", GameRoll.getEntities());
                                 LOGGER.info("目前物品列表为{}", GameRoll.getItems());
                                 LOGGER.info("目前已死亡实体列表为{}",DIED_ENTITY_LIST);
