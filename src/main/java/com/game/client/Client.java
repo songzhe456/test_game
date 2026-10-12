@@ -57,7 +57,13 @@ public class Client {
 
         @Override
         protected void channelRead0(ChannelHandlerContext ctx, String msg) {
-            logger.info("服务器发送了：{}", msg);
+            String posterPrefix = "[poster]";
+            if(msg.startsWith(posterPrefix)) {
+                logger.info("服务器的poster发送了：{}", msg.substring(posterPrefix.length()));
+            }
+            else{
+                logger.info("服务器发送了：{}", msg);
+            }
         }
 
         @Override

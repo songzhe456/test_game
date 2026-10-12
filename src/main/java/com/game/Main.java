@@ -91,6 +91,9 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        Scanner headlessChoose = new Scanner(System.in);
+        LOGGER.info("是否要打开gui模式");
+        Config.setHeadlessMode(!headlessChoose.nextBoolean());
         if(Config.isHeadlessMode()) {
             startHeadlessGame();
         }

@@ -17,6 +17,6 @@ public class PacketPoster extends Entity implements Postable {
     @Override
     public void attack(Entity target, double critValue) {
         super.attack(target, critValue);
-        post("我攻击啦！");
+        post("[poster]我攻击啦！");
     }
 }

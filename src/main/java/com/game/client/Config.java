@@ -12,7 +12,7 @@ public class Config {
     public static final boolean NEED_INPUT = true;
     private static final Logger LOGGER = LoggerFactory.getLogger(Config.class);
     public static final boolean TEST_MODE = false;
-    private static boolean HEADLESS_MODE = false;
+    private static boolean HEADLESS_MODE = true;
 
     public static boolean isHeadlessMode() {
         return HEADLESS_MODE;
