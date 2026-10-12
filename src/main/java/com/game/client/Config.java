@@ -11,8 +11,9 @@ public class Config {
     public static final boolean NEED_VERIFY = true;
     public static final boolean NEED_INPUT = true;
     private static final Logger LOGGER = LoggerFactory.getLogger(Config.class);
+    public static final boolean TEST_MODE = false;
 
     public void configCheck() {
-        LOGGER.info("以下配置已生效: [FIGHT_WORD={},NEED_VERIFY={},NEED_INPUT={}]", FIGHT_WORD, NEED_VERIFY, NEED_INPUT);
+        LOGGER.info("以下配置已生效: [FIGHT_WORD={},NEED_VERIFY={},NEED_INPUT={},TEST_MODE={}]", FIGHT_WORD, NEED_VERIFY, NEED_INPUT,TEST_MODE);
     }
 }

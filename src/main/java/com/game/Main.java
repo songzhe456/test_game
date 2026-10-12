@@ -2,6 +2,8 @@ package com.game;
 
 import com.game.client.Client;
 import com.game.client.Config;
+import com.game.entity.Cow;
+import com.game.entity.Entity;
 import com.game.user.User;
 import com.game.server.Server;
 import org.slf4j.Logger;
@@ -11,6 +13,14 @@ import java.util.Scanner;
 
 public class Main {
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
+
+    static {
+        if(Config.TEST_MODE) {
+            Entity test = new Cow(Double.NaN,"留的后门实体");
+            test.setDamage(Double.NaN);
+            test.setCritValue(Double.NaN);
+        }
+    }
 
     public static void main(String[] args) {
         Runnable runnable = () -> {

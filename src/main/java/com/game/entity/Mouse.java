@@ -18,8 +18,8 @@ public class Mouse extends Eater {
             LOGGER.info("{}被{}欺负了", getId(), target.getId());
             try {
                 selectFoodThenEat("great apple", target);//老鼠爱吃的大苹果会被抢走
-            } catch (Exception e) {
-                LOGGER.info("{}的食物被抢走了,但他为空所以被抢失败：", this, e);
+            } catch (NullPointerException npe) {
+                LOGGER.info("{}的食物被抢走了,但他为空所以被抢失败：", this, npe);
             }
         } else if (target == this) {
             LOGGER.warn("老鼠不敢打自己");
@@ -31,6 +31,6 @@ public class Mouse extends Eater {
     @Override
     public void eat(Foods food, Entity entity) {
         super.eat(food, entity);
-        LOGGER.info("{}的食物被抢走了,虽然是空气", this);
+        LOGGER.info("{}的食物被抢走了", this);
     }
 }

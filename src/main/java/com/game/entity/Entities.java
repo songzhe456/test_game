@@ -31,8 +31,10 @@ public class Entities {
         randomEntity = getEntities().get(7);
         poster = getEntities().get(8);
         for (Entity entity : GameRoll.getEntities()) {
-            entity.setCritValue(10);
-            entity.tick();
+            if(entity.getLiteralCritValue() == 0) {
+                entity.setCritValue(10);
+                entity.tick();
+            }
         }
 
         LOGGER.debug("实体列表目前为{},大小为{}", getEntities(), getEntities().size());
