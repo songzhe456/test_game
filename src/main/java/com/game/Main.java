@@ -2,6 +2,7 @@ package com.game;
 
 import com.game.client.Client;
 import com.game.client.Config;
+import com.game.client.gui.StartWindow;
 import com.game.entity.Cow;
 import com.game.entity.Entity;
 import com.game.user.User;
@@ -22,7 +23,7 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) {
+    public static void startHeadlessGame(){
         Runnable runnable = () -> {
             try {
                 LOGGER.info("程序开始运行");
@@ -87,5 +88,14 @@ public class Main {
         Thread mainThread = new Thread(runnable);
         mainThread.setName("Main Thread");
         mainThread.start();
+    }
+
+    public static void main(String[] args) {
+        if(Config.isHeadlessMode()) {
+            startHeadlessGame();
+        }
+        else{
+            new StartWindow();
+        }
     }
 }

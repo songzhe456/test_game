@@ -12,8 +12,17 @@ public class Config {
     public static final boolean NEED_INPUT = true;
     private static final Logger LOGGER = LoggerFactory.getLogger(Config.class);
     public static final boolean TEST_MODE = false;
+    private static boolean HEADLESS_MODE = false;
+
+    public static boolean isHeadlessMode() {
+        return HEADLESS_MODE;
+    }
 
     public void configCheck() {
         LOGGER.info("以下配置已生效: [FIGHT_WORD={},NEED_VERIFY={},NEED_INPUT={},TEST_MODE={}]", FIGHT_WORD, NEED_VERIFY, NEED_INPUT,TEST_MODE);
+    }
+
+    public static void setHeadlessMode(boolean headlessMode) {
+        HEADLESS_MODE = headlessMode;
     }
 }
