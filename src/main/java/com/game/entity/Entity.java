@@ -3,7 +3,7 @@ package com.game.entity;
 import com.game.entity.func.Direction;
 import com.game.entity.func.Move;
 import com.game.entity.poster.PacketPoster;
-import com.game.func.Attack;
+import com.game.func.CanAttack;
 import com.game.func.Crit;
 import com.game.func.ExceptionUtils;
 import com.game.item.Item;
@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("unused")
-public abstract class Entity implements Attack {
+public abstract class Entity implements CanAttack {
     private double health;
     private String id;
     private final EntityType type;
@@ -150,13 +150,25 @@ public abstract class Entity implements Attack {
         entityDieThread.start();
     }
 
+    public void doAttack(Entity target,double critValue,CanAttack canAttack){
+        canAttack.attack(target,critValue);
+    }
+
+    /**
+     * 调用 doAttack(Entity target,double critValue,CanAttack canAttack)进行攻击，
+     * lambda中t代表目标，c代表暴击值
+     * @param target 目标
+     * @param critValue 暴击值
+     */
     public void attack(Entity target, double critValue) {
-        if (target.getHealth() > 0) {
-            LOGGER.info("{}攻击了{}扣除了{}点血量", this.getId(), target.getId(), critValue);
-            target.setHealth(target.getHealth() - critValue);
-        } else {
-            LOGGER.warn("目标{}已死亡", target);
-        }
+        doAttack(target,critValue,(t,c) -> {
+            if (t.getHealth() > 0) {
+                LOGGER.info("{}攻击了{}扣除了{}点血量", this.getId(), t.getId(), c);
+                t.setHealth(t.getHealth() - c);
+            } else {
+                LOGGER.warn("目标{}已死亡", t);
+            }
+        });
     }
 
     public static Entity summon(EntityType type, double health, String id) {
