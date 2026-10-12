@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 public class Main {
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
-    static void main(String[] args) {
+    public static void main(String[] args) {
         Runnable runnable = () -> {
             try {
                 LOGGER.info("服务端程序开始运行");
