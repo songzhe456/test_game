@@ -17,12 +17,12 @@ public class KFCEntity extends Eater {
         doAttack(target,critValue,(t,c) -> {
             if (t.getHealth() > 0) {
                 LOGGER.info("肯德基攻击！");
-                super.attack(t, getCritValue());
                 selectFoodThenEat("coke", this);
             } else {
                 LOGGER.warn("目标{}已死亡", t);
             }
         });
+        super.attack(target, critValue);
     }
 
     @Override
