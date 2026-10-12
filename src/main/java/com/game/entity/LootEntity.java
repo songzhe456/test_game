@@ -8,7 +8,7 @@ public class LootEntity extends Entity {
     }
 
     @Override
-    public void attack(Entity target, double attackCrit) {
-        super.attack(target, attackCrit);
+    public void attack(Entity target, double critValue) {
+        super.attack(target, critValue);
     }
 }

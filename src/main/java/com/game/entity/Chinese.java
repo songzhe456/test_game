@@ -15,8 +15,10 @@ public class Chinese extends Eater {
 
     @Override
     public void attack(Entity target, double critValue) {
-        super.attack(target, critValue);
-        GameRoll.entityMove(this, Direction.Directions.UP, this.getId(), BodyPart.HEAD);
-        LOGGER.info("{}能飞", getId());
+        doAttack(target,critValue,(t,c) -> {
+            super.attack(t, c);
+            GameRoll.entityMove(this, Direction.Directions.UP, this.getId(), BodyPart.HEAD);
+            LOGGER.info("{}能飞", getId());
+        });
     }
 }

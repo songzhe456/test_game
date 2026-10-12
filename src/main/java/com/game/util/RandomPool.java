@@ -29,7 +29,7 @@ public class RandomPool {
         }
 
         @Override
-        public void attack(Entity target, double health) {
+        public void attack(Entity target, double critValue) {
             double attackCrit = new Crit().getCrit(getCritValue(), getCritValue());
             target.setHealth(target.getHealth() - attackCrit);
             logger.info("{}攻击了{}造成了{}点血量", getId(), target.getId(), Math.round(attackCrit * 10) / 10.0);

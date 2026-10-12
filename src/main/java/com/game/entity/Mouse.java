@@ -12,20 +12,22 @@ public class Mouse extends Eater {
     }
 
     @Override
-    public void attack(Entity target, double attackCrit) {
-        if (this.getHealth() > 0 && target != this) {
-            setHealth(getHealth() - target.getCritValue());
-            LOGGER.info("{}被{}欺负了", getId(), target.getId());
-            try {
-                selectFoodThenEat("great apple", target);//老鼠爱吃的大苹果会被抢走
-            } catch (NullPointerException npe) {
-                LOGGER.info("{}的食物被抢走了,但他为空所以被抢失败：", this, npe);
+    public void attack(Entity target, double critValue) {
+        doAttack(target,critValue,(t,c) -> {
+            if (this.getHealth() > 0 && t != this) {
+                setHealth(getHealth() - t.getCritValue());
+                LOGGER.info("{}被{}欺负了", getId(), t.getId());
+                try {
+                    selectFoodThenEat("great apple", t);//老鼠爱吃的大苹果会被抢走
+                } catch (NullPointerException npe) {
+                    LOGGER.info("{}的食物被抢走了,但他为空所以被抢失败：", this, npe);
+                }
+            } else if (t == this) {
+                LOGGER.warn("老鼠不敢打自己");
+            } else {
+                LOGGER.warn("自身{}已死亡", this);
             }
-        } else if (target == this) {
-            LOGGER.warn("老鼠不敢打自己");
-        } else {
-            LOGGER.warn("自身{}已死亡", this);
-        }
+        });
     }
 
     @Override
