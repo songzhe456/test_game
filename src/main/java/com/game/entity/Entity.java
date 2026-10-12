@@ -22,6 +22,8 @@ public abstract class Entity implements Attack {
     private double damage;
     private final Crit crit = new Crit();
     private double critValue;
+    //控制是否可以更改实体名字
+    private boolean canChangeId = true;
     private static final Logger LOGGER = LoggerFactory.getLogger(Entity.class);
     private boolean isFirstSummon;
     private Move move;
@@ -117,6 +119,7 @@ public abstract class Entity implements Attack {
     }
 
     public void setId(String id) {
+        if(!canChangeId){return;}
         this.id = id;
     }
 
@@ -169,7 +172,7 @@ public abstract class Entity implements Attack {
                 case DIVISION_ZERO -> new DivisionZeroEntity(health, id);
                 case CHINESE -> new Chinese(health, id);
                 case POSTER -> new PacketPoster(health, id);
-                default -> new Cow(health, "实体生成出错");
+                default -> new Cow(health, "实体生成出错").setCanChangeId(false);
             };
         } catch (Exception e) {
             LOGGER.error("{}生成失败", id, e);
@@ -188,6 +191,15 @@ public abstract class Entity implements Attack {
 
     public EntityType getType() {
         return type;
+    }
+
+    public Entity setCanChangeId(boolean canChangeId) {
+        this.canChangeId = canChangeId;
+        return this;
+    }
+
+    public boolean isCanChangeId() {
+        return canChangeId;
     }
 
     public void tick() {
