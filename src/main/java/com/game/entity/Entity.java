@@ -162,7 +162,7 @@ public abstract class Entity implements CanAttack {
      */
     public void attack(Entity target, double critValue) {
         doAttack(target,critValue,(t,c) -> {
-            if (t.getHealth() > 0) {
+            if (getHealth() > 0) {
                 LOGGER.info("{}攻击了{}扣除了{}点血量", this.getId(), t.getId(), c);
                 t.setHealth(t.getHealth() - c);
             } else {

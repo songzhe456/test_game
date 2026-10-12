@@ -13,7 +13,7 @@ public class NullEntity extends Entity {
     @Override
     public void attack(Entity target, double critValue) {
         doAttack(target,critValue,(t,c) -> {
-            if (t.getHealth() > 0) {
+            if (getHealth() > 0) {
                 String originId = t.getId();
                 String nullEntityType = "被篡改";
                 t.setId(nullEntityType);
