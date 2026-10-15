@@ -19,6 +19,7 @@ public class Entities {
     public static Entity divisionZeroEntity;
     public static Entity chinese;
     public static Entity poster;
+    public static Entity police;
 
     public static void initEntity() {
         cow = getEntities().get(0);
@@ -30,6 +31,7 @@ public class Entities {
         chinese = getEntities().get(6);
         randomEntity = getEntities().get(7);
         poster = getEntities().get(8);
+        police = getEntities().get(9);
         for (Entity entity : GameRoll.getEntities()) {
             if(entity.getLiteralCritValue() == 0) {
                 entity.setCritValue(10);
@@ -56,6 +58,7 @@ public class Entities {
                     LOGGER.error("生成随机实体时出现如下异常：", e);
                 }
                 Entity.summon(Entity.EntityType.POSTER, 50, "poster");
+                Entity.summon(Entity.EntityType.POLICE,100,"police");
             } catch (Exception e) {
                 LOGGER.error("生成实体时出现异常", e);
             }

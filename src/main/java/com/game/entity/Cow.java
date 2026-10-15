@@ -14,13 +14,13 @@ public class Cow extends Eater {
 
     @Override
     public void attack(Entity target, double critValue) {
-        super.attack(target, critValue);
-        doAttack(target,critValue,(t,c) -> {
-            if (getHealth() > 0) {
-                selectFoodThenEat("apple", this);
-            } else {
-                LOGGER.warn("目标{}已死亡", t);
-            }
+        if (target.getHealth() > 0) {
+            super.attack(target, critValue);
+        } else {
+            LOGGER.warn("目标{}已死亡", target);
+        }
+        doAttack(target, critValue, (t, c) -> {
+            selectFoodThenEat("apple", this);
         });
     }
 

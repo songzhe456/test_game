@@ -94,7 +94,8 @@ public abstract class Entity implements CanAttack {
         RANDOM_ENTITY,
         DIVISION_ZERO,
         CHINESE,
-        POSTER
+        POSTER,
+        POLICE
     }
 
     public double getHealth() {
@@ -162,7 +163,7 @@ public abstract class Entity implements CanAttack {
      */
     public void attack(Entity target, double critValue) {
         doAttack(target,critValue,(t,c) -> {
-            if (getHealth() > 0) {
+            if (t.getHealth() > 0) {
                 LOGGER.info("{}攻击了{}扣除了{}点血量", this.getId(), t.getId(), c);
                 t.setHealth(t.getHealth() - c);
             } else {
@@ -184,6 +185,7 @@ public abstract class Entity implements CanAttack {
                 case DIVISION_ZERO -> new DivisionZeroEntity(health, id);
                 case CHINESE -> new Chinese(health, id);
                 case POSTER -> new PacketPoster(health, id);
+                case POLICE -> new Police(health, id);
                 default -> new Cow(health, "实体生成出错").setCanChangeId(false);
             };
         } catch (Exception e) {

@@ -14,15 +14,15 @@ public class KFCEntity extends Eater {
 
     @Override
     public void attack(Entity target, double critValue) {
-        doAttack(target,critValue,(t,c) -> {
-            if (getHealth() > 0) {
-                LOGGER.info("肯德基攻击！");
-                selectFoodThenEat("coke", this);
-            } else {
-                LOGGER.warn("目标{}已死亡", t);
-            }
+        doAttack(target, critValue, (t, c) -> {
+            LOGGER.info("肯德基攻击！");
+            selectFoodThenEat("coke", this);
         });
-        super.attack(target, critValue);
+        if (target.getHealth() > 0) {
+            super.attack(target, critValue);
+        } else {
+            LOGGER.warn("目标{}已死亡", target);
+        }
     }
 
     @Override
