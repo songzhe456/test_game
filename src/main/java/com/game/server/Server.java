@@ -56,7 +56,7 @@ public class Server {
 
     public static class ServerHandler extends ChannelInboundHandlerAdapter {
         private static String msg;
-        private static String content;
+        private String content;
         private static final Logger LOGGER = LoggerFactory.getLogger(ServerHandler.class);
 
         private static ChannelHandlerContext context;
@@ -77,7 +77,7 @@ public class Server {
             return context;
         }
 
-        public static String getContent() {
+        public String getContent() {
             return content;
         }
 
