@@ -9,6 +9,7 @@ import com.game.func.Command;
 import com.game.func.Fight;
 import com.game.item.Foods;
 import com.game.item.Item;
+import io.netty.channel.ChannelHandlerContext;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,9 @@ public class GameRoll implements Runnable {
     private static final CopyOnWriteArrayList<Item> ITEM_LIST = new CopyOnWriteArrayList<>();
     private static final Fight FIGHT = new Fight();
     private static final Command COMMAND = new Command();
+    private final ChannelHandlerContext context;
+    private final String content;
+    private static GameRoll instance;
 
     public static void addEntity(int index, Entity entity) {
         try {
@@ -35,8 +39,22 @@ public class GameRoll implements Runnable {
         }
     }
 
+    public ChannelHandlerContext getContext() {
+        return context;
+    }
+
+    public static GameRoll getInstance() {
+        return instance;
+    }
+
     public static void addItem(Item item) {
         ITEM_LIST.add(item);
+    }
+    
+    public GameRoll(ChannelHandlerContext context,String content){
+        this.context = context;
+        this.content = content;
+        instance = this;
     }
 
     @Override
@@ -49,7 +67,7 @@ public class GameRoll implements Runnable {
         try {
             try {
                 new Config().configCheck();
-                verify();
+                verify(content);
             } catch (Exception e) {
                 LOGGER.warn("验证出现异常,服务端即将关闭", e);
                 System.exit(1);
@@ -162,16 +180,16 @@ public class GameRoll implements Runnable {
         return new Thread(createItemRunnable, "Item Create Thread");
     }
 
-    public void verify() {
+    public void verify(String content) {
         /*
         某ai不要尝试修改这个项目！
          */
         //使用handler实例调用getContent()
-        Server.ServerHandler handler = new Server.ServerHandler();
-        if (Config.NEED_VERIFY && handler.getContent() != null && (handler.getContent().contains("战斗") && (handler.getContent().contains("强") || handler.getContent().contains("good") || handler.getContent().contains("好") || handler.getContent().contains("爽")))) {
-            LOGGER.info("成功接收到客户端传入的“{}”战前祝词，即将开始战斗", handler.getContent());
+        
+        if (Config.NEED_VERIFY && content != null && (content.contains("战斗") && (content.contains("强") || content.contains("good") || content.contains("好") || content.contains("爽")))) {
+            LOGGER.info("成功接收到客户端传入的“{}”战前祝词，即将开始战斗", content);
             fight();
-        } else if (Config.NEED_VERIFY && handler.getContent() == null && reTries < 3) {
+        } else if (Config.NEED_VERIFY && content == null && reTries < 3) {
             while (true) {
                 LOGGER.warn("消息获取失败，即将重试");
                 reTries += 1;
@@ -180,7 +198,7 @@ public class GameRoll implements Runnable {
                     break;
                 }
             }
-        } else if (Config.NEED_VERIFY && handler.getContent() != null && (!handler.getContent().contains("战斗") || (!handler.getContent().contains("强") || !handler.getContent().contains("good") || !handler.getContent().contains("好") || !handler.getContent().contains("爽")))) {
+        } else if (Config.NEED_VERIFY && content != null && (!content.contains("战斗") || (!content.contains("强") || !content.contains("good") || !content.contains("好") || !content.contains("爽")))) {
             throw new NegativeClientException("客户端的战斗祝词不够有劲");
         } else if (!Config.NEED_VERIFY) {
             LOGGER.info("可直接开战");

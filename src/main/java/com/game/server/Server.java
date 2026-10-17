@@ -59,7 +59,7 @@ public class Server {
         private String content;
         private static final Logger LOGGER = LoggerFactory.getLogger(ServerHandler.class);
 
-        private static ChannelHandlerContext context;
+        private ChannelHandlerContext context;
 
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) {
@@ -68,12 +68,12 @@ public class Server {
             content = in.toString(CharsetUtil.UTF_8);
             in.release();
             LOGGER.info("已接收客户端传来的{}", content);
-            new GameRoll().run();
+            new GameRoll(context,content).run();
 
             ctx.writeAndFlush("服务器已接收" + content);
         }
 
-        public static ChannelHandlerContext getContext() {
+        public ChannelHandlerContext getContext() {
             return context;
         }
 

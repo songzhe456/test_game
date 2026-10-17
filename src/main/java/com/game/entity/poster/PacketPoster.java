@@ -1,6 +1,7 @@
 package com.game.entity.poster;
 
 import com.game.entity.Entity;
+import com.game.server.GameRoll;
 import com.game.server.Server;
 
 public class PacketPoster extends Entity implements Postable {
@@ -11,7 +12,7 @@ public class PacketPoster extends Entity implements Postable {
 
     @Override
     public void post(String content) {
-        Server.ServerHandler.getContext().writeAndFlush(content);
+        GameRoll.getInstance().getContext().writeAndFlush(content);
     }
 
     @Override
