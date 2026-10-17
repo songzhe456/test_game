@@ -23,4 +23,8 @@ public class Place {
     public void removeEntity(Entity entity){
         entities.remove(entity);
     }
+
+    public CopyOnWriteArrayList<Entity> getEntities() {
+        return entities;
+    }
 }

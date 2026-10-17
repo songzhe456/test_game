@@ -147,6 +147,7 @@ public class GameRoll implements Runnable {
                                 LOGGER.info("目前实体列表为{}", GameRoll.getEntities());
                                 LOGGER.info("目前物品列表为{}", GameRoll.getItems());
                                 LOGGER.info("目前已死亡实体列表为{}", DIED_ENTITY_LIST);
+                                LOGGER.info("目前place实体列表为{}", place.getEntities());
                             } catch (Exception e) {
                                 LOGGER.error("循环出现异常", e);
                             }
