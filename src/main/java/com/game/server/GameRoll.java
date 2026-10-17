@@ -9,6 +9,7 @@ import com.game.func.Command;
 import com.game.func.Fight;
 import com.game.item.Foods;
 import com.game.item.Item;
+import com.game.place.Place;
 import io.netty.channel.ChannelHandlerContext;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -29,6 +30,7 @@ public class GameRoll implements Runnable {
     private final ChannelHandlerContext context;
     private final String content;
     private static GameRoll instance;
+    private final Place place = Entities.getPlace();
 
     public static void addEntity(int index, Entity entity) {
         try {
@@ -85,6 +87,7 @@ public class GameRoll implements Runnable {
         for (Entity entity : ENTITY_LIST) {
             if (entity != null && entity.getHealth() <= 0) {
                 entity.die();
+                place.removeEntity(entity);
                 DIED_ENTITY_LIST.add(entity);
             }
         }

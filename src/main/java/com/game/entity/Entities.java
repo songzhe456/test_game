@@ -1,5 +1,7 @@
 package com.game.entity;
 
+import com.game.place.Place;
+import com.game.place.Places;
 import com.game.server.GameRoll;
 import com.game.util.RandomPool;
 import com.game.util.RandomUtil;
@@ -20,6 +22,7 @@ public class Entities {
     public static Entity chinese;
     public static Entity poster;
     public static Entity police;
+    private static final Place place = new Place(Places.GRASS_LAND);
 
     public static void initEntity() {
         cow = getEntities().get(0);
@@ -36,10 +39,16 @@ public class Entities {
             if(entity.getLiteralCritValue() == 0) {
                 entity.setCritValue(10);
                 entity.tick();
+                //先将所有实体加入草地
+                place.addEntity(entity);
             }
         }
 
         LOGGER.debug("实体列表目前为{},大小为{}", getEntities(), getEntities().size());
+    }
+
+    public static Place getPlace() {
+        return place;
     }
 
     public void summon() {
