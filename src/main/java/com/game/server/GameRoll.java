@@ -9,7 +9,6 @@ import com.game.func.Command;
 import com.game.func.Fight;
 import com.game.item.Foods;
 import com.game.item.Item;
-import com.game.place.Place;
 import io.netty.channel.ChannelHandlerContext;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -30,7 +29,6 @@ public class GameRoll implements Runnable {
     private final ChannelHandlerContext context;
     private final String content;
     private static GameRoll instance;
-    private final Place place = Entities.getPlace();
 
     public static void addEntity(int index, Entity entity) {
         try {
@@ -87,7 +85,14 @@ public class GameRoll implements Runnable {
         for (Entity entity : ENTITY_LIST) {
             if (entity != null && entity.getHealth() <= 0) {
                 entity.die();
-                place.removeEntity(entity);
+                if(Entities.GRASS_LIKE.contains(entity)) {
+                    entity.removeFromPlace(Entities.grassLand);
+                } else if (Entities.LAVA_LIKE.contains(entity)) {
+                    entity.removeFromPlace(Entities.inLava);
+                }
+                else if(Entities.SEA_LIKE.contains(entity)){
+                    entity.removeFromPlace(Entities.sea);
+                }
                 DIED_ENTITY_LIST.add(entity);
             }
         }
@@ -130,6 +135,7 @@ public class GameRoll implements Runnable {
                                 LOGGER.info("---第{}轮---", ROLL_COUNT);
                                 ROLL_COUNT += 1;
                                 detectDeath();
+                                checkPlaceEffect();
                                 System.out.println("请选择要移动的实体");
                                 try {
                                     Entity chosen = COMMAND.chooseEntity();
@@ -147,7 +153,6 @@ public class GameRoll implements Runnable {
                                 LOGGER.info("目前实体列表为{}", GameRoll.getEntities());
                                 LOGGER.info("目前物品列表为{}", GameRoll.getItems());
                                 LOGGER.info("目前已死亡实体列表为{}", DIED_ENTITY_LIST);
-                                LOGGER.info("目前place实体列表为{}", place.getEntities());
                             } catch (Exception e) {
                                 LOGGER.error("循环出现异常", e);
                             }
@@ -165,6 +170,15 @@ public class GameRoll implements Runnable {
             createEntityThread.start();
         } catch (Exception e) {
             LOGGER.error("实体生成线程出现异常", e);
+        }
+    }
+
+    private void checkPlaceEffect() {
+        for(Entity entity : ENTITY_LIST){
+            if(entity.isInPlace(Entities.inLava)){
+                entity.setHealth(entity.getHealth() - 1);
+                LOGGER.info("{}烫伤了",entity);
+            }
         }
     }
 

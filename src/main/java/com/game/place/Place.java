@@ -21,6 +21,7 @@ public class Place {
     }
 
     public void removeEntity(Entity entity){
+        LOGGER.info("{}离开了{}",entity,placeType);
         entities.remove(entity);
     }
 

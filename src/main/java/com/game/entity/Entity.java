@@ -7,6 +7,7 @@ import com.game.func.CanAttack;
 import com.game.func.Crit;
 import com.game.func.ExceptionUtils;
 import com.game.item.Item;
+import com.game.place.Place;
 import com.game.server.GameRoll;
 import com.game.util.RandomPool;
 import com.game.util.RandomUtil;
@@ -53,6 +54,18 @@ public abstract class Entity implements CanAttack {
         }
         ExceptionUtils.nullPointerExceptionTrigger(type);
         GameRoll.addEntity(index, this);
+    }
+
+    public void addToPlace(Place place){
+        place.addEntity(this);
+    }
+
+    public void removeFromPlace(Place place){
+        place.removeEntity(this);
+    }
+
+    public boolean isInPlace(Place place){
+        return place.getEntities().contains(this);
     }
 
     public Item getLoot() {

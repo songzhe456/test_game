@@ -8,6 +8,8 @@ import com.game.util.RandomUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+
 import static com.game.server.GameRoll.getEntities;
 
 public class Entities {
@@ -22,7 +24,14 @@ public class Entities {
     public static Entity chinese;
     public static Entity poster;
     public static Entity police;
-    private static final Place place = new Place(Places.GRASS_LAND);
+
+    public static Place grassLand = new Place(Places.GRASS_LAND);
+    public static Place inLava = new Place(Places.IN_LAVA);
+    public static Place sea = new Place(Places.SEA);
+
+    public static final ArrayList<Entity> GRASS_LIKE = new ArrayList<>();
+    public static final ArrayList<Entity> LAVA_LIKE = new ArrayList<>();
+    public static final ArrayList<Entity> SEA_LIKE = new ArrayList<>();
 
     public static void initEntity() {
         cow = getEntities().get(0);
@@ -39,16 +48,35 @@ public class Entities {
             if(entity.getLiteralCritValue() == 0) {
                 entity.setCritValue(10);
                 entity.tick();
-                //先将所有实体加入草地
-                place.addEntity(entity);
             }
         }
 
-        LOGGER.debug("实体列表目前为{},大小为{}", getEntities(), getEntities().size());
-    }
+        GRASS_LIKE.add(cow);
+        GRASS_LIKE.add(mouse);
+        GRASS_LIKE.add(man);
+        GRASS_LIKE.add(police);
 
-    public static Place getPlace() {
-        return place;
+        LAVA_LIKE.add(nullEntity);
+        LAVA_LIKE.add(divisionZeroEntity);
+        LAVA_LIKE.add(randomEntity);
+
+        SEA_LIKE.add(kfcEntity);
+        SEA_LIKE.add(chinese);
+        SEA_LIKE.add(poster);
+
+        for(Entity entity : GRASS_LIKE){
+            entity.addToPlace(grassLand);
+        }
+
+        for(Entity entity : LAVA_LIKE){
+            entity.addToPlace(inLava);
+        }
+
+        for(Entity entity : SEA_LIKE){
+            entity.addToPlace(sea);
+        }
+
+        LOGGER.debug("实体列表目前为{},大小为{}", getEntities(), getEntities().size());
     }
 
     public void summon() {
