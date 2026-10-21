@@ -179,6 +179,11 @@ public class GameRoll implements Runnable {
                 entity.setHealth(entity.getHealth() - 1);
                 LOGGER.info("{}烫伤了",entity);
             }
+
+            if(entity.isInPlace(Entities.sea)){
+                entity.setHealth(entity.getHealth() - entity.getHealth());
+                LOGGER.warn("{}被神秘力量拖走！",entity);
+            }
         }
     }
 
