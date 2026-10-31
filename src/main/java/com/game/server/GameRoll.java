@@ -118,7 +118,9 @@ public class GameRoll implements Runnable {
 
     private void tickBaby(CopyOnWriteArrayList<Baby> babyList){
         for (Baby baby : babyList){
+            BabyGrower.State originState = baby.getState();
             baby.setState(baby.getGrower().nextState(baby.getState()));
+            LOGGER.info("{}从{}变为{}",baby,originState,baby.getState());
         }
     }
 
@@ -128,6 +130,7 @@ public class GameRoll implements Runnable {
         try {
             Runnable createEntityRunnable = () -> {
                 new Entities().summon();
+                BABY_LIST.add((Baby) Entities.baby);
                 try {
                     Runnable rollRunnable = () -> {
                         LOGGER.info("回合线程内实体列表目前为{},大小为{}", ENTITY_LIST, ENTITY_LIST.size());
@@ -143,7 +146,6 @@ public class GameRoll implements Runnable {
                                 }
                                 LOGGER.info("---第{}轮---", ROLL_COUNT);
                                 ROLL_COUNT += 1;
-                                BABY_LIST.add((Baby) Entities.baby);
                                 checkPlaceEffect();
                                 if((ROLL_COUNT % 2) == 0) {
                                     tickBaby(BABY_LIST);
