@@ -3,6 +3,8 @@ package com.game.server;
 import com.game.client.Config;
 import com.game.entity.Entities;
 import com.game.entity.Entity;
+import com.game.entity.baby.Baby;
+import com.game.entity.baby.BabyGrower;
 import com.game.entity.func.BodyPart;
 import com.game.entity.func.Direction;
 import com.game.func.Command;
@@ -29,6 +31,7 @@ public class GameRoll implements Runnable {
     private final ChannelHandlerContext context;
     private final String content;
     private static GameRoll instance;
+    private static final CopyOnWriteArrayList<Baby> BABY_LIST = new CopyOnWriteArrayList<>();
 
     public static void addEntity(int index, Entity entity) {
         try {
@@ -113,6 +116,12 @@ public class GameRoll implements Runnable {
         FIGHT.fight(attacker, target);
     }
 
+    private void tickBaby(CopyOnWriteArrayList<Baby> babyList){
+        for (Baby baby : babyList){
+            baby.setState(baby.getGrower().nextState(baby.getState()));
+        }
+    }
+
     public void fight() {
         Thread createItemThread = getCreateItemThread();
         createItemThread.start();
@@ -134,8 +143,12 @@ public class GameRoll implements Runnable {
                                 }
                                 LOGGER.info("---第{}轮---", ROLL_COUNT);
                                 ROLL_COUNT += 1;
-                                detectDeath();
+                                BABY_LIST.add((Baby) Entities.baby);
                                 checkPlaceEffect();
+                                if((ROLL_COUNT % 2) == 0) {
+                                    tickBaby(BABY_LIST);
+                                }
+                                detectDeath();
                                 System.out.println("请选择要移动的实体");
                                 try {
                                     Entity chosen = COMMAND.chooseEntity();

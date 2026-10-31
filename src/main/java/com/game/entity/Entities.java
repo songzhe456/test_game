@@ -24,6 +24,7 @@ public class Entities {
     public static Entity chinese;
     public static Entity poster;
     public static Entity police;
+    public static Entity baby;
 
     public static Place grassLand = new Place(Places.GRASS_LAND);
     public static Place inLava = new Place(Places.IN_LAVA);
@@ -44,6 +45,7 @@ public class Entities {
         randomEntity = getEntities().get(7);
         poster = getEntities().get(8);
         police = getEntities().get(9);
+        baby = getEntities().get(10);
         for (Entity entity : GameRoll.getEntities()) {
             if(entity.getLiteralCritValue() == 0) {
                 entity.setCritValue(10);
@@ -55,6 +57,7 @@ public class Entities {
         GRASS_LIKE.add(mouse);
         GRASS_LIKE.add(man);
         GRASS_LIKE.add(police);
+        GRASS_LIKE.add(baby);
 
         LAVA_LIKE.add(nullEntity);
         LAVA_LIKE.add(divisionZeroEntity);
@@ -96,6 +99,7 @@ public class Entities {
                 }
                 Entity.summon(Entity.EntityType.POSTER, 50, "poster");
                 Entity.summon(Entity.EntityType.POLICE,100,"police");
+                Entity.summon(Entity.EntityType.BABY,Double.POSITIVE_INFINITY,"john");//出生时无敌
             } catch (Exception e) {
                 LOGGER.error("生成实体时出现异常", e);
             }

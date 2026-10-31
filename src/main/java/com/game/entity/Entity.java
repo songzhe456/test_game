@@ -1,5 +1,7 @@
 package com.game.entity;
 
+import com.game.entity.baby.Baby;
+import com.game.entity.baby.BabyGrower;
 import com.game.entity.func.Direction;
 import com.game.entity.func.Move;
 import com.game.entity.poster.PacketPoster;
@@ -31,6 +33,8 @@ public abstract class Entity implements CanAttack {
     private final Item[] lootTable = new Item[]{
             Item.create("apple", "apple")//Entity默认掉落表，仅苹果
     };
+
+    private static final BabyGrower BABY_GROWER = new BabyGrower();
 
     public Crit getCrit() {
         return crit;
@@ -108,7 +112,8 @@ public abstract class Entity implements CanAttack {
         DIVISION_ZERO,
         CHINESE,
         POSTER,
-        POLICE
+        POLICE,
+        BABY
     }
 
     public double getHealth() {
@@ -199,6 +204,7 @@ public abstract class Entity implements CanAttack {
                 case CHINESE -> new Chinese(health, id);
                 case POSTER -> new PacketPoster(health, id);
                 case POLICE -> new Police(health, id);
+                case BABY -> new Baby(health, id,BABY_GROWER);
                 default -> new Cow(health, "实体生成出错").setCanChangeId(false);
             };
         } catch (Exception e) {
