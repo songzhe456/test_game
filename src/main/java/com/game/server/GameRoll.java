@@ -151,15 +151,14 @@ public class GameRoll implements Runnable {
                                     tickBaby(BABY_LIST);
                                 }
                                 for(Baby baby : BABY_LIST){
-                                    if(!BabyGrower.State.BABY.equals(baby.getState())){
-                                        baby.setHealth(10);
-                                    }
-                                    if (BabyGrower.State.YOUNG.equals(baby.getState())) {
-                                        baby.setHealth(20);
-                                    } else if (BabyGrower.State.OLD.equals(baby.getState())) {
-                                        baby.setHealth(5);
-                                    } else if (BabyGrower.State.UNKNOWN.equals(baby.getState())) {
-                                        baby.die();
+                                    switch (baby.getState()){
+                                        case BABY -> {}
+                                        case YOUNG -> baby.setHealth(20);
+                                        case TEENAGER -> baby.setHealth(30);
+                                        case ADULT -> baby.setHealth(40);
+                                        case OLD -> baby.setHealth(5);
+                                        case UNKNOWN -> baby.die();//普通未知，会死亡
+                                        default -> baby.setHealth(Double.NaN);//完全未知
                                     }
                                 }
                                 detectDeath();
