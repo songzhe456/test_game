@@ -150,6 +150,18 @@ public class GameRoll implements Runnable {
                                 if((ROLL_COUNT % 2) == 0) {
                                     tickBaby(BABY_LIST);
                                 }
+                                for(Baby baby : BABY_LIST){
+                                    if(!BabyGrower.State.BABY.equals(baby.getState())){
+                                        baby.setHealth(10);
+                                    }
+                                    if (BabyGrower.State.YOUNG.equals(baby.getState())) {
+                                        baby.setHealth(20);
+                                    } else if (BabyGrower.State.OLD.equals(baby.getState())) {
+                                        baby.setHealth(5);
+                                    } else if (BabyGrower.State.UNKNOWN.equals(baby.getState())) {
+                                        baby.die();
+                                    }
+                                }
                                 detectDeath();
                                 System.out.println("请选择要移动的实体");
                                 try {
