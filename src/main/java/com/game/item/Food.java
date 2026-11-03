@@ -26,19 +26,11 @@ public class Food extends Item {
     }
 
     public static Food create(FoodType type, String name) {
-        switch (type) {
-            case APPLE -> {
-                return new Apple(name);
-            }
-            case GREAT_APPLE -> {
-                return new GreatApple(name);
-            }
-            case COKE -> {
-                return new Coke(name);
-            }
-            default -> {
-                return new Apple("食物创建失败");
-            }
-        }
+        return switch (type) {
+            case APPLE -> new Apple(name);
+            case GREAT_APPLE -> new GreatApple(name);
+            case COKE -> new Coke(name);
+            default -> new Apple("食物创建失败");
+        };
     }
 }
