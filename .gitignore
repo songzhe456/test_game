@@ -10,6 +10,7 @@ src/main/java/com/test/
 .idea
 dependency-reduced-pom.xml
 mvn_test_*
+out/
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
