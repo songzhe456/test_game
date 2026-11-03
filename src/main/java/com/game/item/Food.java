@@ -4,11 +4,11 @@ import com.game.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Foods extends Item {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Foods.class);
+public class Food extends Item {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Food.class);
     private final double healthResume;
 
-    public Foods(String name, double healthResume) {
+    public Food(String name, double healthResume) {
         super(ItemType.FOODS, name);
         this.healthResume = healthResume;
 
@@ -25,7 +25,7 @@ public class Foods extends Item {
         COKE
     }
 
-    public static Foods create(FoodType type, String name) {
+    public static Food create(FoodType type, String name) {
         switch (type) {
             case APPLE -> {
                 return new Apple(name);

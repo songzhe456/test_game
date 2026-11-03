@@ -1,6 +1,6 @@
 package com.game.entity;
 
-import com.game.item.Foods;
+import com.game.item.Food;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +25,7 @@ public class Man extends Eater {
     }
 
     @Override
-    public void eat(Foods food, Entity entity) {
+    public void eat(Food food, Entity entity) {
         super.eat(food, entity);
     }
 }

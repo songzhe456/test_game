@@ -1,10 +1,10 @@
 package com.game.entity;
 
-import com.game.item.Foods;
+import com.game.item.Food;
 
 public interface CanEatFood {
-    default void eat(Foods food, Entity entity) {
+    default void eat(Food food, Entity entity) {
         food.eat(entity);
-        Foods.remove(food);
+        Food.remove(food);
     }
 }

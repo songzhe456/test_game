@@ -9,7 +9,7 @@ import com.game.entity.func.BodyPart;
 import com.game.entity.func.Direction;
 import com.game.func.Command;
 import com.game.func.Fight;
-import com.game.item.Foods;
+import com.game.item.Food;
 import com.game.item.Item;
 import io.netty.channel.ChannelHandlerContext;
 import org.jetbrains.annotations.NotNull;
@@ -224,9 +224,9 @@ public class GameRoll implements Runnable {
     private @NotNull Thread getCreateItemThread() {
         Runnable createItemRunnable = () -> {
             try {
-                getItems().add(Foods.create(Foods.FoodType.APPLE, "apple"));
-                getItems().add(Foods.create(Foods.FoodType.GREAT_APPLE, "great apple"));
-                getItems().add(Foods.create(Foods.FoodType.COKE, "coke"));
+                getItems().add(Food.create(Food.FoodType.APPLE, "apple"));
+                getItems().add(Food.create(Food.FoodType.GREAT_APPLE, "great apple"));
+                getItems().add(Food.create(Food.FoodType.COKE, "coke"));
                 getItems().add(Item.create("null", null));
             } catch (Exception e) {
                 LOGGER.error("物品创建出现异常", e);

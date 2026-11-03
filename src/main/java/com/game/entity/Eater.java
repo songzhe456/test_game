@@ -1,6 +1,6 @@
 package com.game.entity;
 
-import com.game.item.Foods;
+import com.game.item.Food;
 import com.game.item.Item;
 import com.game.server.GameRoll;
 import org.slf4j.Logger;
@@ -18,11 +18,11 @@ public abstract class Eater extends Entity implements CanEatFood {
     public void selectFoodThenEat(String foodName, Entity entity) {
         for (Item item : GameRoll.getItems()) {
             try {
-                if (!(item instanceof Foods)) {
+                if (!(item instanceof Food)) {
                     continue;
                 }
                 if (Objects.equals(item.name, foodName)) {
-                    eat((Foods) item, entity);
+                    eat((Food) item, entity);
                 }
             } catch (Exception e) {
                 LOGGER.warn("食用动作被取消，原因：", e);
@@ -32,7 +32,7 @@ public abstract class Eater extends Entity implements CanEatFood {
     }
 
     @Override
-    public void eat(Foods food, Entity entity) {
+    public void eat(Food food, Entity entity) {
         CanEatFood.super.eat(food, entity);
     }
 }
