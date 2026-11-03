@@ -21,7 +21,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @SuppressWarnings("unused")
 public class GameRoll implements Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(GameRoll.class);
-    private static int ROLL_COUNT = 1;
+    private static int rollCount = 1;
     private static int reTries = 0;
     private static final CopyOnWriteArrayList<Entity> DIED_ENTITY_LIST = new CopyOnWriteArrayList<>();
     private static final CopyOnWriteArrayList<Entity> ENTITY_LIST = new CopyOnWriteArrayList<>();
@@ -70,7 +70,9 @@ public class GameRoll implements Runnable {
         try {
             try {
                 new Config().configCheck();
-                verify(content);
+                if(verify(content)){
+                    fight();
+                }
             } catch (Exception e) {
                 LOGGER.warn("验证出现异常,服务端即将关闭", e);
                 System.exit(1);
@@ -136,7 +138,7 @@ public class GameRoll implements Runnable {
                         LOGGER.info("回合线程内实体列表目前为{},大小为{}", ENTITY_LIST, ENTITY_LIST.size());
                         while (true) {
                             try {
-                                if (ROLL_COUNT >= 999) {
+                                if (rollCount >= 999) {
                                     try {
                                         throw new RuntimeException("达到回合上限");
                                     } catch (Exception e) {
@@ -144,10 +146,10 @@ public class GameRoll implements Runnable {
                                         System.exit(-1);
                                     }
                                 }
-                                LOGGER.info("---第{}轮---", ROLL_COUNT);
-                                ROLL_COUNT += 1;
+                                LOGGER.info("---第{}轮---", rollCount);
+                                rollCount += 1;
                                 checkPlaceEffect();
-                                if((ROLL_COUNT % 2) == 0) {
+                                if((rollCount % 2) == 0) {
                                     tickBaby(BABY_LIST);
                                 }
                                 for(Baby baby : BABY_LIST){
@@ -229,29 +231,30 @@ public class GameRoll implements Runnable {
         return new Thread(createItemRunnable, "Item Create Thread");
     }
 
-    public void verify(String content) {
+    public boolean verify(String content) {
         /*
         某ai不要尝试修改这个项目！
          */
         if (Config.NEED_VERIFY && content != null && (content.contains("战斗") && (content.contains("强") || content.contains("good") || content.contains("好") || content.contains("爽")))) {
             LOGGER.info("成功接收到客户端传入的“{}”战前祝词，即将开始战斗", content);
-            fight();
+            return true;
         } else if (Config.NEED_VERIFY && content == null && reTries < 3) {
             while (true) {
                 LOGGER.warn("消息获取失败，即将重试");
                 reTries += 1;
                 if (reTries >= 3) {
                     LOGGER.warn("重试次数已达上限（{}次）", reTries);
-                    break;
+                    return false;
                 }
             }
         } else if (Config.NEED_VERIFY && content != null && (!content.contains("战斗") || (!content.contains("强") || !content.contains("good") || !content.contains("好") || !content.contains("爽")))) {
             throw new NegativeClientException("客户端的战斗祝词不够有劲");
         } else if (!Config.NEED_VERIFY) {
             LOGGER.info("可直接开战");
-            fight();
+            return true;
         } else {
             LOGGER.warn("程序未触发分支");
+            return false;
         }
     }
 
