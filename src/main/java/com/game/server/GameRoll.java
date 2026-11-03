@@ -28,8 +28,8 @@ public class GameRoll implements Runnable {
     private static final CopyOnWriteArrayList<Item> ITEM_LIST = new CopyOnWriteArrayList<>();
     private static final Fight FIGHT = new Fight();
     private static final Command COMMAND = new Command();
-    private final ChannelHandlerContext context;
-    private final String content;
+    private ChannelHandlerContext context;
+    private String content;
     private static GameRoll instance;
     private static final CopyOnWriteArrayList<Baby> BABY_LIST = new CopyOnWriteArrayList<>();
 
@@ -40,6 +40,14 @@ public class GameRoll implements Runnable {
             LOGGER.error("实体列表扩充失败：", e);
             ENTITY_LIST.add(index, null);
         }
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setContext(ChannelHandlerContext context) {
+        this.context = context;
     }
 
     public ChannelHandlerContext getContext() {
@@ -54,9 +62,7 @@ public class GameRoll implements Runnable {
         ITEM_LIST.add(item);
     }
     
-    public GameRoll(ChannelHandlerContext context,String content){
-        this.context = context;
-        this.content = content;
+    public GameRoll(){
         instance = this;
     }
 

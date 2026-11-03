@@ -18,9 +18,11 @@ public class Server {
     private static ChannelFuture channelFuture;
     private final int port;
     private static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
+    private static GameRoll gameRoll;
 
-    public Server(int port) {
+    public Server(int port,GameRoll gameRoll) {
         this.port = port;
+        Server.gameRoll = gameRoll;
     }
 
     public void run() throws InterruptedException {
@@ -68,7 +70,9 @@ public class Server {
             content = in.toString(CharsetUtil.UTF_8);
             in.release();
             LOGGER.info("已接收客户端传来的{}", content);
-            new GameRoll(context,content).run();
+            Server.gameRoll.setContent(content);
+            Server.gameRoll.setContext(context);
+            GameRoll.getInstance().run();
 
             ctx.writeAndFlush("服务器已接收" + content);
         }

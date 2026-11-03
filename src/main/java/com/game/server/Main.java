@@ -12,7 +12,8 @@ public class Main {
                 LOGGER.info("服务端程序开始运行");
                 Runnable serverRunnable = () -> {
                     try {
-                        new Server(8888).run();
+                        GameRoll gameRoll = new GameRoll();
+                        new Server(8888,gameRoll).run();
                     } catch (Exception e) {
                         LOGGER.error("服务器线程出现异常", e);
                     }
