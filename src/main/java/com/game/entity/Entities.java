@@ -8,8 +8,6 @@ import com.game.util.RandomUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-
 import static com.game.server.GameRoll.getEntities;
 
 public class Entities {
@@ -30,10 +28,6 @@ public class Entities {
     public static Place inLava = new Place(Places.IN_LAVA);
     public static Place sea = new Place(Places.SEA);
 
-    public static final ArrayList<Entity> GRASS_LIKE = new ArrayList<>();
-    public static final ArrayList<Entity> LAVA_LIKE = new ArrayList<>();
-    public static final ArrayList<Entity> SEA_LIKE = new ArrayList<>();
-
     public static void initEntity() {
         cow = getEntities().get(0);
         man = getEntities().get(1);
@@ -53,31 +47,19 @@ public class Entities {
             }
         }
 
-        GRASS_LIKE.add(cow);
-        GRASS_LIKE.add(mouse);
-        GRASS_LIKE.add(man);
-        GRASS_LIKE.add(police);
-        GRASS_LIKE.add(baby);
+        cow.addToPlace(grassLand);
+        mouse.addToPlace(grassLand);
+        man.addToPlace(grassLand);
+        police.addToPlace(grassLand);
+        baby.addToPlace(grassLand);
 
-        LAVA_LIKE.add(nullEntity);
-        LAVA_LIKE.add(divisionZeroEntity);
-        LAVA_LIKE.add(randomEntity);
+        nullEntity.addToPlace(inLava);
+        divisionZeroEntity.addToPlace(inLava);
+        randomEntity.addToPlace(inLava);
 
-        SEA_LIKE.add(kfcEntity);
-        SEA_LIKE.add(chinese);
-        SEA_LIKE.add(poster);
-
-        for(Entity entity : GRASS_LIKE){
-            entity.addToPlace(grassLand);
-        }
-
-        for(Entity entity : LAVA_LIKE){
-            entity.addToPlace(inLava);
-        }
-
-        for(Entity entity : SEA_LIKE){
-            entity.addToPlace(sea);
-        }
+        kfcEntity.addToPlace(sea);
+        chinese.addToPlace(sea);
+        poster.addToPlace(sea);
 
         LOGGER.debug("实体列表目前为{},大小为{}", getEntities(), getEntities().size());
     }
