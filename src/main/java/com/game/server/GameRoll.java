@@ -96,13 +96,10 @@ public class GameRoll implements Runnable {
         for (Entity entity : ENTITY_LIST) {
             if (entity != null && entity.getHealth() <= 0) {
                 entity.die();
-                if(Entities.GRASS_LIKE.contains(entity)) {
-                    entity.removeFromPlace(Entities.grassLand);
-                } else if (Entities.LAVA_LIKE.contains(entity)) {
-                    entity.removeFromPlace(Entities.inLava);
-                }
-                else if(Entities.SEA_LIKE.contains(entity)){
-                    entity.removeFromPlace(Entities.sea);
+                switch (entity.getPlace().getPlaceType()){
+                    case GRASS_LAND -> entity.removeFromPlace(Entities.grassLand);
+                    case IN_LAVA -> entity.removeFromPlace(Entities.inLava);
+                    case SEA -> entity.removeFromPlace(Entities.sea);
                 }
                 DIED_ENTITY_LIST.add(entity);
             }
@@ -209,14 +206,15 @@ public class GameRoll implements Runnable {
 
     private void checkPlaceEffect() {
         for(Entity entity : ENTITY_LIST){
-            if(entity.isInPlace(Entities.inLava)){
-                entity.setHealth(entity.getHealth() - 1);
-                LOGGER.info("{}烫伤了",entity);
-            }
-
-            if(entity.isInPlace(Entities.sea)){
-                entity.setHealth(entity.getHealth() - entity.getHealth());
-                LOGGER.warn("{}被神秘力量拖走！",entity);
+            switch (entity.getPlace().getPlaceType()){
+                case IN_LAVA -> {
+                    entity.setHealth(entity.getHealth() - 1);
+                    LOGGER.info("{}烫伤了",entity);
+                }
+                case SEA -> {
+                    entity.setHealth(entity.getHealth() - entity.getHealth());
+                    LOGGER.warn("{}被神秘力量拖走！",entity);
+                }
             }
         }
     }

@@ -25,6 +25,10 @@ public class Place {
         entities.remove(entity);
     }
 
+    public Places getPlaceType() {
+        return placeType;
+    }
+
     public CopyOnWriteArrayList<Entity> getEntities() {
         return entities;
     }

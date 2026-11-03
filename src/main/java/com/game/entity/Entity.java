@@ -35,6 +35,7 @@ public abstract class Entity implements CanAttack {
     };
 
     private static final BabyGrower BABY_GROWER = new BabyGrower();
+    private Place place;
 
     public Crit getCrit() {
         return crit;
@@ -62,6 +63,15 @@ public abstract class Entity implements CanAttack {
 
     public void addToPlace(Place place){
         place.addEntity(this);
+        setPlace(place);
+    }
+
+    public Place getPlace() {
+        return place;
+    }
+
+    public void setPlace(Place place) {
+        this.place = place;
     }
 
     public void removeFromPlace(Place place){
