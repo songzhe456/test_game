@@ -253,7 +253,7 @@ public class GameRoll implements Runnable {
                     return false;
                 }
             }
-        } else if (Config.NEED_VERIFY && content != null && (!content.contains("战斗") || (!content.contains("强") || !content.contains("good") || !content.contains("好") || !content.contains("爽")))) {
+        } else if (Config.NEED_VERIFY && content != null){
             throw new NegativeClientException("客户端的战斗祝词不够有劲");
         } else if (!Config.NEED_VERIFY) {
             LOGGER.info("可直接开战");
