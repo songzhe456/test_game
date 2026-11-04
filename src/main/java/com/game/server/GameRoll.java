@@ -206,14 +206,16 @@ public class GameRoll implements Runnable {
 
     private void checkPlaceEffect() {
         for(Entity entity : ENTITY_LIST){
-            switch (entity.getPlace().getPlaceType()){
-                case IN_LAVA -> {
-                    entity.setHealth(entity.getHealth() - 1);
-                    LOGGER.info("{}烫伤了",entity);
-                }
-                case SEA -> {
-                    entity.setHealth(entity.getHealth() - entity.getHealth());
-                    LOGGER.warn("{}被神秘力量拖走！",entity);
+            if(entity != null && entity.getPlace() != null) {
+                switch (entity.getPlace().getPlaceType()) {
+                    case IN_LAVA -> {
+                        entity.setHealth(entity.getHealth() - 1);
+                        LOGGER.info("{}烫伤了", entity);
+                    }
+                    case SEA -> {
+                        entity.setHealth(entity.getHealth() - entity.getHealth());
+                        LOGGER.warn("{}被神秘力量拖走！", entity);
+                    }
                 }
             }
         }

@@ -16,6 +16,8 @@ import com.game.util.RandomUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
+
 @SuppressWarnings("unused")
 public abstract class Entity implements CanAttack {
     private double health;
@@ -167,7 +169,7 @@ public abstract class Entity implements CanAttack {
             isDead = true;
             Runnable lootSpawnRunnable = () -> {
                 GameRoll.getEntities().remove(this);
-                summon(EntityType.LOOT, 5.0, id + "'s loot");
+                Objects.requireNonNull(summon(EntityType.LOOT, 5.0, id + "'s loot")).addToPlace(Entities.grassLand);
                 LOGGER.debug("有实体死亡，当前实体列表为{}", GameRoll.getEntities());
             };
             Thread lootSpawnThread = new Thread(lootSpawnRunnable);

@@ -59,6 +59,7 @@ public class Command {
             for (Entity e : GameRoll.getEntities()) {
                 if (entity.equals(e.getId())) {
                     chosen = e;
+                    break;
                 }
             }
         } catch (Exception e) {
