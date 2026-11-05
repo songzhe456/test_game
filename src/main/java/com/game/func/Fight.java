@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 public class Fight {
     private static final Logger LOGGER = LoggerFactory.getLogger(Fight.class);
+    private boolean autoFight = false;
 
     public void fight(Entity attacker, Entity target) {
         if (attacker != null) {
@@ -18,5 +19,13 @@ public class Fight {
         } else {
             LOGGER.warn("攻击者不存在");
         }
+    }
+
+    public void setAutoFight(boolean autoFight) {
+        this.autoFight = autoFight;
+    }
+
+    public boolean isAutoFight() {
+        return autoFight;
     }
 }

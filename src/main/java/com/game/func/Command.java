@@ -68,4 +68,10 @@ public class Command {
         }
         return chosen;
     }
+
+    public boolean autoFightCommand(){
+        Scanner scanner = Config.INPUT_SCANNER;
+        String answer = scanner.nextLine();
+        return "是".equals(answer);
+    }
 }

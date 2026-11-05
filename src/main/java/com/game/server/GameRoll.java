@@ -32,6 +32,7 @@ public class GameRoll implements Runnable {
     private String content;
     private static GameRoll instance;
     private static final CopyOnWriteArrayList<Baby> BABY_LIST = new CopyOnWriteArrayList<>();
+    private boolean alreadySetAutoFight = false;
 
     public static void addEntity(int index, Entity entity) {
         try {
@@ -121,6 +122,16 @@ public class GameRoll implements Runnable {
         FIGHT.fight(attacker, target);
     }
 
+    private void doAutoFight(){
+        for(int i = 0;i < ENTITY_LIST.size() - 1;i ++){
+            Entity entity = ENTITY_LIST.get(i);
+            Entity next = ENTITY_LIST.get(i + 1);
+            if ((entity != null && next != null) && entity.getCritValue() > (next.getHealth() / 2) && entity.getHealth() > next.getHealth()){
+                entity.attack(next,entity.getCritValue());
+            }
+        }
+    }
+
     private void tickBaby(CopyOnWriteArrayList<Baby> babyList){
         for (Baby baby : babyList){
             BabyGrower.State originState = baby.getState();
@@ -167,20 +178,30 @@ public class GameRoll implements Runnable {
                                     }
                                 }
                                 detectDeath();
-                                System.out.println("请选择要移动的实体");
-                                try {
-                                    Entity chosen = COMMAND.chooseEntity();
-                                    COMMAND.scanMove(chosen, chosen.getId());
-                                } catch (Exception e) {
-                                    LOGGER.warn("实体不存在", e);
+                                if(!alreadySetAutoFight){
+                                    System.out.println("是否要开启自动战斗？");
+                                    FIGHT.setAutoFight(COMMAND.autoFightCommand());
+                                    alreadySetAutoFight = true;
                                 }
-                                System.out.println("请输入攻击者(输入exit退出)");
-                                Entity attacker = COMMAND.chooseEntity();
+                                if(!FIGHT.isAutoFight()) {
+                                    System.out.println("请选择要移动的实体");
+                                    try {
+                                        Entity chosen = COMMAND.chooseEntity();
+                                        COMMAND.scanMove(chosen, chosen.getId());
+                                    } catch (Exception e) {
+                                        LOGGER.warn("实体不存在", e);
+                                    }
+                                    System.out.println("请输入攻击者(输入exit退出)");
+                                    Entity attacker = COMMAND.chooseEntity();
 
-                                System.out.println("请输入攻击目标(输入exit退出)");
-                                Entity target = COMMAND.chooseEntity();
+                                    System.out.println("请输入攻击目标(输入exit退出)");
+                                    Entity target = COMMAND.chooseEntity();
 
-                                doFight(attacker, target);
+                                    doFight(attacker, target);
+                                }
+                                else {
+                                    doAutoFight();
+                                }
                                 LOGGER.info("目前实体列表为{}", GameRoll.getEntities());
                                 LOGGER.info("目前物品列表为{}", GameRoll.getItems());
                                 LOGGER.info("目前已死亡实体列表为{}", DIED_ENTITY_LIST);
