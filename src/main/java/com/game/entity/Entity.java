@@ -38,6 +38,15 @@ public abstract class Entity implements CanAttack {
 
     private static final BabyGrower BABY_GROWER = new BabyGrower();
     private Place place;
+    private int index;
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
 
     public Crit getCrit() {
         return crit;
@@ -50,6 +59,7 @@ public abstract class Entity implements CanAttack {
     public Entity(int index, EntityType type, double health, String id) {
         setFirstSummon(true);
         this.type = type;
+        this.index = index;
         setId(id);
         setHealth(health);
         if (type != EntityType.LOOT) {
@@ -60,7 +70,6 @@ public abstract class Entity implements CanAttack {
             lootEntitySummoned(health, id, lootInLoot);
         }
         ExceptionUtils.nullPointerExceptionTrigger(type);
-        GameRoll.addEntity(index, this);
     }
 
     public void addToPlace(Place place){
@@ -223,6 +232,10 @@ public abstract class Entity implements CanAttack {
             LOGGER.error("{}生成失败", id, e);
             return null;
         }
+    }
+
+    public void add(){
+        GameRoll.addEntity(getIndex(),this);
     }
 
     public void move(Direction.Directions directions, String id) {

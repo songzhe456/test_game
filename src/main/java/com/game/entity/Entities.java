@@ -67,21 +67,21 @@ public class Entities {
     public void summon() {
         try {
             try {
-                Entity.summon(Entity.EntityType.COW, 115, "cow");
-                Entity.summon(Entity.EntityType.MAN, 150, "man");
-                Entity.summon(Entity.EntityType.NULL, 150, "bruce");
-                Entity.summon(Entity.EntityType.KFC, 200, "kfc entity");
-                Entity.summon(Entity.EntityType.MOUSE, 25, "mouse");
-                Entity.summon(Entity.EntityType.DIVISION_ZERO, 20, "jack");
-                Entity.summon(Entity.EntityType.CHINESE, 100, "chinese");
+                Entity.summon(Entity.EntityType.COW, 115, "cow").add();
+                Entity.summon(Entity.EntityType.MAN, 150, "man").add();
+                Entity.summon(Entity.EntityType.NULL, 150, "bruce").add();
+                Entity.summon(Entity.EntityType.KFC, 200, "kfc entity").add();
+                Entity.summon(Entity.EntityType.MOUSE, 25, "mouse").add();
+                Entity.summon(Entity.EntityType.DIVISION_ZERO, 20, "jack").add();
+                Entity.summon(Entity.EntityType.CHINESE, 100, "chinese").add();
                 try {
-                    Entity.summon(Entity.EntityType.RANDOM_ENTITY, RandomUtil.getRandDouble(0, 1000), "[随机实体]" + RandomPool.RandomEntity.getRandType().toString());
+                    Entity.summon(Entity.EntityType.RANDOM_ENTITY, RandomUtil.getRandDouble(0, 1000), "[随机实体]" + RandomPool.RandomEntity.getRandType().toString()).add();
                 } catch (Exception e) {
                     LOGGER.error("生成随机实体时出现如下异常：", e);
                 }
-                Entity.summon(Entity.EntityType.POSTER, 50, "poster");
-                Entity.summon(Entity.EntityType.POLICE,100,"police");
-                Entity.summon(Entity.EntityType.BABY,Double.POSITIVE_INFINITY,"john");//出生时无敌
+                Entity.summon(Entity.EntityType.POSTER, 50, "poster").add();
+                Entity.summon(Entity.EntityType.POLICE,100,"police").add();
+                Entity.summon(Entity.EntityType.BABY,Double.POSITIVE_INFINITY,"john").add();//出生时无敌
             } catch (Exception e) {
                 LOGGER.error("生成实体时出现异常", e);
             }

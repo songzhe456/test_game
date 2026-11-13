@@ -39,7 +39,7 @@ public class GameRoll implements Runnable {
             ENTITY_LIST.add(index, entity);
         } catch (Exception e) {
             LOGGER.error("实体列表扩充失败：", e);
-            ENTITY_LIST.add(index, null);
+            ENTITY_LIST.add(ENTITY_LIST.size(), null);
         }
     }
 

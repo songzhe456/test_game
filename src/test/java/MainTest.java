@@ -1,18 +1,22 @@
 import com.game.entity.Entity;
-import com.game.func.Fight;
-import com.game.server.GameRoll;
+import com.game.place.Place;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.io.File;
 
 public class MainTest {
     @org.junit.jupiter.api.Test
-    public void test() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public void test() {
         //在此处测试
-        GameRoll.addEntity(0, Entity.summon(Entity.EntityType.COW,20,"test"));
-        GameRoll.addEntity(1, Entity.summon(Entity.EntityType.COW,5,"test"));
-        Method method = GameRoll.class.getDeclaredMethod("doAutoFight");
-        method.setAccessible(true);
-        method.invoke(new GameRoll());
+        Entity entity = new Entity(0, Entity.EntityType.CHINESE, 50, "test") {
+            @Override
+            public void addToPlace(Place place) {
+                super.addToPlace(place);
+            }
+
+            @Override
+            public void die() {
+                System.out.println("我没死");
+            }
+        };
     }
 }
