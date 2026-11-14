@@ -17,7 +17,8 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @SuppressWarnings("unused")
@@ -35,7 +36,7 @@ public class GameRoll implements Runnable {
     private static GameRoll instance;
     private static final CopyOnWriteArrayList<Baby> BABY_LIST = new CopyOnWriteArrayList<>();
     private boolean alreadySetAutoFight = false;
-    private static ArrayList<Achievement> achievementList = new ArrayList<>();
+    private static Map<String,Achievement> achievements = new HashMap<>();
     private boolean isPlayerControl;
 
     public static void addEntity(int index, Entity entity) {
@@ -124,7 +125,7 @@ public class GameRoll implements Runnable {
             return;
         }
         FIGHT.fight(attacker, target);
-        achievementList.get(1).tryAchieve(isPlayerControl);
+        achievements.get("怪物猎人").tryAchieve(isPlayerControl);
     }
 
     private void doAutoFight() {
@@ -134,7 +135,7 @@ public class GameRoll implements Runnable {
             if ((entity != null && next != null) && entity.getCritValue() > (next.getHealth() / 2) && entity.getHealth() > next.getHealth()) {
                 entity.attack(next, entity.getCritValue());
             }
-            achievementList.get(1).tryAchieve(true);
+            achievements.get("怪物猎人").tryAchieve(true);
         }
     }
 
@@ -147,8 +148,8 @@ public class GameRoll implements Runnable {
     }
 
     public void fight() {
-        achievementList.add(new Achievement("首战"));
-        achievementList.add(new Achievement("怪物猎人"));
+        achievements.put("首战",new Achievement("首战"));
+        achievements.put("怪物猎人",new Achievement("怪物猎人"));
         Thread createItemThread = getCreateItemThread();
         createItemThread.start();
         try {
@@ -169,7 +170,7 @@ public class GameRoll implements Runnable {
                                         System.exit(-1);
                                     }
                                 }
-                                achievementList.get(0).tryAchieve(rollCount <= 1);
+                                achievements.get("首战").tryAchieve(rollCount <= 1);
                                 LOGGER.info("---第{}轮---", rollCount);
                                 rollCount += 1;
                                 checkPlaceEffect();
