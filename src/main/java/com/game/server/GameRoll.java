@@ -1,5 +1,6 @@
 package com.game.server;
 
+import com.game.achievement.Achievement;
 import com.game.client.Config;
 import com.game.entity.Entities;
 import com.game.entity.Entity;
@@ -16,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @SuppressWarnings("unused")
@@ -33,6 +35,8 @@ public class GameRoll implements Runnable {
     private static GameRoll instance;
     private static final CopyOnWriteArrayList<Baby> BABY_LIST = new CopyOnWriteArrayList<>();
     private boolean alreadySetAutoFight = false;
+    private static ArrayList<Achievement> achievementList = new ArrayList<>();
+    private boolean isPlayerControl;
 
     public static void addEntity(int index, Entity entity) {
         try {
@@ -62,8 +66,8 @@ public class GameRoll implements Runnable {
     public static void addItem(Item item) {
         ITEM_LIST.add(item);
     }
-    
-    public GameRoll(){
+
+    public GameRoll() {
         instance = this;
     }
 
@@ -77,7 +81,7 @@ public class GameRoll implements Runnable {
         try {
             try {
                 new Config().configCheck();
-                if(verify(content)){
+                if (verify(content)) {
                     fight();
                 }
             } catch (Exception e) {
@@ -97,7 +101,7 @@ public class GameRoll implements Runnable {
         for (Entity entity : ENTITY_LIST) {
             if (entity != null && entity.getHealth() <= 0) {
                 entity.die();
-                switch (entity.getPlace().getPlaceType()){
+                switch (entity.getPlace().getPlaceType()) {
                     case GRASS_LAND -> entity.removeFromPlace(Entities.grassLand);
                     case IN_LAVA -> entity.removeFromPlace(Entities.inLava);
                     case SEA -> entity.removeFromPlace(Entities.sea);
@@ -120,27 +124,31 @@ public class GameRoll implements Runnable {
             return;
         }
         FIGHT.fight(attacker, target);
+        achievementList.get(1).tryAchieve(isPlayerControl);
     }
 
-    private void doAutoFight(){
-        for(int i = 0;i < ENTITY_LIST.size() - 1;i ++){
+    private void doAutoFight() {
+        for (int i = 0; i < ENTITY_LIST.size() - 1; i++) {
             Entity entity = ENTITY_LIST.get(i);
             Entity next = ENTITY_LIST.get(i + 1);
-            if ((entity != null && next != null) && entity.getCritValue() > (next.getHealth() / 2) && entity.getHealth() > next.getHealth()){
-                entity.attack(next,entity.getCritValue());
+            if ((entity != null && next != null) && entity.getCritValue() > (next.getHealth() / 2) && entity.getHealth() > next.getHealth()) {
+                entity.attack(next, entity.getCritValue());
             }
+            achievementList.get(1).tryAchieve(true);
         }
     }
 
-    private void tickBaby(CopyOnWriteArrayList<Baby> babyList){
-        for (Baby baby : babyList){
+    private void tickBaby(CopyOnWriteArrayList<Baby> babyList) {
+        for (Baby baby : babyList) {
             BabyGrower.State originState = baby.getState();
             baby.setState(baby.getGrower().nextState(baby.getState()));
-            LOGGER.info("{}从{}变为{}",baby,originState,baby.getState());
+            LOGGER.info("{}从{}变为{}", baby, originState, baby.getState());
         }
     }
 
     public void fight() {
+        achievementList.add(new Achievement("首战"));
+        achievementList.add(new Achievement("怪物猎人"));
         Thread createItemThread = getCreateItemThread();
         createItemThread.start();
         try {
@@ -152,6 +160,7 @@ public class GameRoll implements Runnable {
                         LOGGER.info("回合线程内实体列表目前为{},大小为{}", ENTITY_LIST, ENTITY_LIST.size());
                         while (true) {
                             try {
+                                isPlayerControl = false;
                                 if (rollCount >= 999) {
                                     try {
                                         throw new RuntimeException("达到回合上限");
@@ -160,15 +169,17 @@ public class GameRoll implements Runnable {
                                         System.exit(-1);
                                     }
                                 }
+                                achievementList.get(0).tryAchieve(rollCount <= 1);
                                 LOGGER.info("---第{}轮---", rollCount);
                                 rollCount += 1;
                                 checkPlaceEffect();
-                                if((rollCount % 2) == 0) {
+                                if ((rollCount % 2) == 0) {
                                     tickBaby(BABY_LIST);
                                 }
-                                for(Baby baby : BABY_LIST){
-                                    switch (baby.getState()){
-                                        case BABY -> {}
+                                for (Baby baby : BABY_LIST) {
+                                    switch (baby.getState()) {
+                                        case BABY -> {
+                                        }
                                         case YOUNG -> baby.setHealth(20);
                                         case TEENAGER -> baby.setHealth(30);
                                         case ADULT -> baby.setHealth(40);
@@ -178,12 +189,12 @@ public class GameRoll implements Runnable {
                                     }
                                 }
                                 detectDeath();
-                                if(!alreadySetAutoFight){
+                                if (!alreadySetAutoFight) {
                                     System.out.println("是否要开启自动战斗？");
                                     FIGHT.setAutoFight(COMMAND.autoFightCommand());
                                     alreadySetAutoFight = true;
                                 }
-                                if(!FIGHT.isAutoFight()) {
+                                if (!FIGHT.isAutoFight()) {
                                     System.out.println("请选择要移动的实体");
                                     try {
                                         Entity chosen = COMMAND.chooseEntity();
@@ -193,13 +204,13 @@ public class GameRoll implements Runnable {
                                     }
                                     System.out.println("请输入攻击者(输入exit退出)");
                                     Entity attacker = COMMAND.chooseEntity();
+                                    isPlayerControl = attacker != null;
 
                                     System.out.println("请输入攻击目标(输入exit退出)");
                                     Entity target = COMMAND.chooseEntity();
 
                                     doFight(attacker, target);
-                                }
-                                else {
+                                } else {
                                     doAutoFight();
                                 }
                                 LOGGER.info("目前实体列表为{}", GameRoll.getEntities());
@@ -226,8 +237,8 @@ public class GameRoll implements Runnable {
     }
 
     private void checkPlaceEffect() {
-        for(Entity entity : ENTITY_LIST){
-            if(entity != null && entity.getPlace() != null) {
+        for (Entity entity : ENTITY_LIST) {
+            if (entity != null && entity.getPlace() != null) {
                 switch (entity.getPlace().getPlaceType()) {
                     case IN_LAVA -> {
                         entity.setHealth(entity.getHealth() - 1);
@@ -274,7 +285,7 @@ public class GameRoll implements Runnable {
                     return false;
                 }
             }
-        } else if (Config.NEED_VERIFY && content != null){
+        } else if (Config.NEED_VERIFY && content != null) {
             throw new NegativeClientException("客户端的战斗祝词不够有劲");
         } else if (!Config.NEED_VERIFY) {
             LOGGER.info("可直接开战");
