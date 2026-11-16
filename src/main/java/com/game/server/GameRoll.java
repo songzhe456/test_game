@@ -148,8 +148,10 @@ public class GameRoll implements Runnable {
     }
 
     public void fight() {
-        achievements.put("首战",new Achievement("首战"));
-        achievements.put("怪物猎人",new Achievement("怪物猎人"));
+        Achievement firstFightAch = new Achievement("首战");
+        Achievement monsterHunterAch = new Achievement("怪物猎人");
+        achievements.put(firstFightAch.name(),firstFightAch);
+        achievements.put(monsterHunterAch.name(),monsterHunterAch);
         Thread createItemThread = getCreateItemThread();
         createItemThread.start();
         try {

@@ -1,9 +1,8 @@
 import com.game.achievement.Achievement;
-import com.game.entity.Entity;
-import com.game.place.Place;
 import org.junit.jupiter.api.Assertions;
 
-import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainTest {
     @org.junit.jupiter.api.Test
@@ -15,5 +14,7 @@ public class MainTest {
         Assertions.assertFalse(ach.isAchieved(),"achieved应为false");
         ach.tryAchieve(true);
         Assertions.assertTrue(ach.isAchieved(),"achieved应为true");
+        Map<String,Achievement> achievements = new HashMap<>();
+        achievements.get("oh").tryAchieve(true);
     }
 }
