@@ -1,6 +1,7 @@
 package com.game.server;
 
 import com.game.achievement.Achievement;
+import com.game.archive.Archive;
 import com.game.client.Config;
 import com.game.entity.Entities;
 import com.game.entity.Entity;
@@ -19,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @SuppressWarnings("unused")
@@ -38,6 +40,7 @@ public class GameRoll implements Runnable {
     private boolean alreadySetAutoFight = false;
     private static Map<String,Achievement> achievements = new HashMap<>();
     private boolean isPlayerControl;
+    private final Archive archive = new Archive();
 
     public static void addEntity(int index, Entity entity) {
         try {
@@ -174,6 +177,10 @@ public class GameRoll implements Runnable {
                                 }
                                 achievements.get("首战").tryAchieve(rollCount <= 1);
                                 LOGGER.info("---第{}轮---", rollCount);
+                                System.out.println("请输入预命令：");
+                                Scanner commandScanner = Config.INPUT_SCANNER;
+                                String commandContent = commandScanner.nextLine();
+                                COMMAND.handlePreCommand(commandContent + Command.COMMAND_END);
                                 rollCount += 1;
                                 checkPlaceEffect();
                                 if ((rollCount % 2) == 0) {
@@ -310,5 +317,9 @@ public class GameRoll implements Runnable {
     public static void entityMove(Entity entity, Direction.Directions directions, String id, BodyPart part) {
         entity.move(directions, id);
         LOGGER.info("{}的{}往{}移动了", id, part, directions);
+    }
+
+    public Archive getArchive() {
+        return archive;
     }
 }
