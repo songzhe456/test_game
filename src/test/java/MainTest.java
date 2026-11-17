@@ -1,5 +1,8 @@
 import com.game.achievement.Achievement;
 import com.game.archive.Archive;
+import com.game.entity.Entities;
+import com.game.func.Command;
+import com.game.server.GameRoll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -29,6 +32,8 @@ public class MainTest {
 
     @Test
     public void testCommand(){
-
+        //new GameRoll();
+        new Entities().summon();
+        Assertions.assertDoesNotThrow(() -> new Command().handlePreCommand("show_archive man]"),"无法在未创建GameRoll实例时使用show_archive");
     }
 }
