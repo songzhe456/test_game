@@ -11,17 +11,45 @@ import com.game.server.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Scanner;
 
 public class Main {
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
+    private static StringBuilder logContent = new StringBuilder();
+    private static File logFile;
 
     static {
+        logFile = new File("./logs/latest.log");
+        if (logFile.exists()){
+            if(!logFile.delete()){
+                LOGGER.warn("日志未删除");
+                try {
+                    Files.delete(logFile.toPath());
+                } catch (IOException e) {
+                    LOGGER.warn("日志仍未删除：",e);
+                }
+            }
+        }
         if(Config.TEST_MODE) {
             Entity test = new Cow(Double.NaN,"留的后门实体");
             test.setDamage(Double.NaN);
             test.setCritValue(Double.NaN);
         }
+    }
+
+    public static void appendLog(String content){
+        logContent.append(content);
+    }
+
+    public static File getLogFile() {
+        return logFile;
+    }
+
+    public static StringBuilder getLogContent() {
+        return logContent;
     }
 
     public static void startHeadlessGame(){

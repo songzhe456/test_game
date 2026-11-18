@@ -21,6 +21,7 @@ public class Command {
     public static final char SPACE = ' ';
 
     public void scanMove(Entity entity, String id) {
+        if(!Config.isHeadlessMode()){return;}
         Scanner scanMove = Config.INPUT_SCANNER;
         System.out.println("请输入方向");
         String direction = scanMove.nextLine();
@@ -54,6 +55,7 @@ public class Command {
     }
 
     public Entity chooseEntity() {
+        if(!Config.isHeadlessMode()){return null;}
         Scanner chooser = Config.INPUT_SCANNER;
         String entity = chooser.nextLine();
         if ("exit".equals(entity)) {
@@ -76,6 +78,7 @@ public class Command {
     }
 
     public boolean autoFightCommand(){
+        if(!Config.isHeadlessMode()){return false;}
         Scanner scanner = Config.INPUT_SCANNER;
         String answer = scanner.nextLine();
         return "是".equals(answer);

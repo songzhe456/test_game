@@ -1,5 +1,6 @@
 package com.game.server;
 
+import com.game.Main;
 import com.game.achievement.Achievement;
 import com.game.archive.Archive;
 import com.game.client.Config;
@@ -18,6 +19,9 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -41,6 +45,7 @@ public class GameRoll implements Runnable {
     private static Map<String,Achievement> achievements = new HashMap<>();
     private boolean isPlayerControl;
     private final Archive archive = new Archive();
+    private FileReader logFileReader;
 
     public static void addEntity(int index, Entity entity) {
         try {
@@ -151,6 +156,20 @@ public class GameRoll implements Runnable {
     }
 
     public void fight() {
+        File logFile = Main.getLogFile();
+        try {
+            if(!logFile.exists()){
+                if(!logFile.createNewFile()){
+                    throw new IOException("文件创建失败");
+                }
+            }
+            if (logFile.canRead()) {
+                logFileReader = new FileReader(Main.getLogFile());
+            }
+        }
+        catch (IOException ioException){
+            LOGGER.warn("处理日志文件失败：",ioException);
+        }
         Achievement firstFightAch = new Achievement("首战");
         Achievement monsterHunterAch = new Achievement("怪物猎人");
         achievements.put(firstFightAch.name(),firstFightAch);
@@ -178,9 +197,11 @@ public class GameRoll implements Runnable {
                                 achievements.get("首战").tryAchieve(rollCount <= 1);
                                 LOGGER.info("---第{}轮---", rollCount);
                                 System.out.println("请输入预命令：");
-                                Scanner commandScanner = Config.INPUT_SCANNER;
-                                String commandContent = commandScanner.nextLine();
-                                COMMAND.handlePreCommand(commandContent + Command.COMMAND_END);
+                                if(Config.isHeadlessMode()) {
+                                    Scanner commandScanner = Config.INPUT_SCANNER;
+                                    String commandContent = commandScanner.nextLine();
+                                    COMMAND.handlePreCommand(commandContent + Command.COMMAND_END);
+                                }
                                 rollCount += 1;
                                 checkPlaceEffect();
                                 if ((rollCount % 2) == 0) {
@@ -226,6 +247,10 @@ public class GameRoll implements Runnable {
                                 LOGGER.info("目前实体列表为{}", GameRoll.getEntities());
                                 LOGGER.info("目前物品列表为{}", GameRoll.getItems());
                                 LOGGER.info("目前已死亡实体列表为{}", DIED_ENTITY_LIST);
+                                Main.appendLog(logFileReader.readAllAsString());
+                                if(!Config.isHeadlessMode()){
+                                    break;
+                                }
                             } catch (Exception e) {
                                 LOGGER.error("循环出现异常", e);
                             }
