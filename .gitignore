@@ -11,6 +11,9 @@ src/main/java/com/test/
 dependency-reduced-pom.xml
 mvn_test_*
 out/
+htmlReport/
+coverage-tests/
+coverage-report/
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
