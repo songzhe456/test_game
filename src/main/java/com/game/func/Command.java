@@ -111,7 +111,7 @@ public class Command {
         }
 
         String baseCommand = "";
-        CopyOnWriteArrayList<String> args= new CopyOnWriteArrayList<>();
+        CopyOnWriteArrayList<String> args = new CopyOnWriteArrayList<>();
         for (String cmd : commands) {
             if(cmd.equals(commands.getFirst())){
                 baseCommand = cmd;
