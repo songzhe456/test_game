@@ -85,6 +85,9 @@ public class Command {
     }
 
     public void showEntityArchive(Archive archive,String name){
+        if(GameRoll.getEntities().isEmpty()){
+            LOGGER.warn("暂无实体，请先生成实体！");
+        }
         for (Entity entity : GameRoll.getEntities()){
             if (name.equals(entity.getId())){
                 archive.showEntityArchive(entity.getId(),entity.getHealth());

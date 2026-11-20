@@ -1,6 +1,7 @@
 import com.game.archive.Archive;
 import com.game.entity.Entities;
 import com.game.func.Command;
+import com.game.server.GameRoll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -8,6 +9,9 @@ public class MainTest {
     @Test
     public void test() {
         //在此处测试
+        new GameRoll();
+        String needSplit = "show_archive cow]";
+        new Command().handlePreCommand(needSplit);
     }
 
     @Test
